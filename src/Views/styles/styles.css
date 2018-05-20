@@ -1,0 +1,39 @@
+#Button{
+
+    -fx-text-fill: white;
+    -fx-font-size: 15;
+    -fx-font-family: "Fira Code";
+    -fx-font-weight: bold;
+    -fx-pref-height: 100;
+    -fx-pref-width: 200;
+    -fx-background-color: linear-gradient( #2f3441 , #212531 );
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
+    -fx-border-radius: 4px;
+    -fx-border-color: antiquewhite;
+
+}
+
+#Button:hover {
+    -fx-background-color: linear-gradient(#212531, #2f3441);
+}
+
+#ButtonContainer {
+
+    -fx-padding: 10;
+    -fx-alignment: center;
+    -fx-pref-height: 400;
+    -fx-pref-width: 4000;
+    -fx-background-color: black;
+}
+
+
+#IntroText {
+
+    -fx-fill: darkred;
+    -fx-font-size: 40;
+    -fx-font-family: "Fira Code";
+    -fx-font-weight: bold;
+    -fx-aligment: center;
+    -fx-background-color: black;
+
+}
