@@ -1,17 +1,41 @@
 package Models
 
-import Models.BoardSize.BoardSize
+import java.io.File
 
-import scala.collection.mutable._
+import Models.BoardSize.BoardSize
+import org.codehaus.jackson.map.ObjectMapper
+
+import scala.collection.{mutable => m}
 
 object HighscoreDatabase {
   private val DATABASE_SIZE = 5
-  private var highscoresMap: HashMap[BoardSize, Array[Highscore]] = new HashMap[BoardSize, Array[Highscore]](DATABASE_SIZE)
+  private var highscoreMap: m.HashMap[BoardSize, List[Highscore]] = new m.HashMap[BoardSize, List[Highscore]]()
 
-  def fetchHighscores: Array[Highscore] = highscores
-  def updateHighscores(newHighscore: Highscore): Unit = {
-    if (highscores.length < 5) {
+  def fetchHighscores(boardSize: BoardSize): List[Highscore] = {
+    highscoreMap.get(boardSize)
+  }
 
+  def updateHighscores(newHighscore: Highscore, boardSize: BoardSize): Unit = {
+    highscoreMap.get(boardSize) match {
+      case Some(highscores) =>
+        for ((highscore, i) <- highscores.zipWithIndex) {
+          if (highscore.time.after(newHighscore.time)) {
+            val newHighscores = highscores.take(i) ++ List(highscore) ++ highscores.drop(i)
+            if (newHighscores.length > DATABASE_SIZE) {
+              highscoreMap.update(boardSize, newHighscores.drop(DATABASE_SIZE))
+            } else {
+              highscoreMap.update(boardSize, newHighscores)
+            }
+          }
+        }
+
+      case None =>
+        highscoreMap.update(boardSize, List(newHighscore))
     }
+  }
+
+  def saveHighscores(): Unit = {
+    val mapper = new ObjectMapper()
+    mapper.writeValue(new File("results.json"), highscoreMap)
   }
 }
