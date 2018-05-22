@@ -37,3 +37,69 @@
     -fx-background-color: black;
 
 }
+
+#InputCellText{
+
+    -fx-fill: black;
+    -fx-font-size: 25;
+    -fx-font-family: "Fira Code";
+    -fx-font-weight: bold;
+    -fx-aligment: center;
+
+
+}
+
+#InputCell{
+
+    -fx-background-color: white;
+    -fx-alignment: center;
+    -fx-border-color:  black;
+    -fx-border-width: 1;
+    -fx-pref-height: 400;
+
+}
+
+#SelectedInputCell{
+
+    -fx-background-color: antiquewhite;
+    -fx-alignment: center;
+    -fx-border-color:  black;
+    -fx-border-width: 2;
+    -fx-pref-height: 400;
+
+
+}
+
+
+#HintCell{
+
+    -fx-alignment: center;
+    -fx-background-color: linear-gradient(to right bottom, #2f3441 50%, #212531 50%);
+    -fx-border-color:  black;
+    -fx-border-width: 1;
+    -fx-pref-height: 400;
+
+
+}
+
+#HintCellText{
+
+    -fx-fill: whitesmoke;
+    -fx-font-size: 15;
+    -fx-font-family: "Fira Code";
+    -fx-font-weight: bold;
+
+
+}
+
+
+
+#EmptyCell{
+
+    -fx-alignment: center;
+    -fx-pref-height: 400;
+    -fx-background-color: red;
+    -fx-padding: 1;
+
+
+}

@@ -31,10 +31,12 @@ class KakuroView extends App {
     val button = new Button
     button.setText(i.toString)
     button.setId("Button")
+    button.setOnAction(KakuroController.numberBtnHandler(button.getText))
 
     val container = new HBox(button)
     container.setId("ButtonContainer")
     HBox.setHgrow(button, Priority.ALWAYS)
+
 
     container
   }
@@ -43,17 +45,13 @@ class KakuroView extends App {
     kakuroCell match {
 
       case kakuroCell: KakuroHintCell =>
-        val text = new Text
 
-        text.setFont(Font.font("Fira Code", 15))
-        text.setFill(Color.WHITE)
+        val text = new Text
+        text.setId("HintCellText")
         text.setText(" " + kakuroCell.getVValue.toString  + "\n    " + kakuroCell.getHValue.toString + " ")
 
         val container = new HBox(text)
-        container.setPrefHeight(400)
-        container.setAlignment(Pos.CENTER)
-        container.setPadding(new Insets(1))
-        container.setStyle("-fx-background-color: linear-gradient(to right bottom, #2f3441 50%, #212531 50%);")
+        container.setId("HintCell")
         HBox.setHgrow(text, Priority.ALWAYS)
 
         container
@@ -61,28 +59,23 @@ class KakuroView extends App {
       case _: KakuroInputCell =>
 
         val text = new Text
-        text.setFont(Font.font("Fira Code", 25))
-        text.setFill(Color.WHITE)
-        text.setText("2")
-        text.setStyle("-fx-background-color: white")
-
+        text.setText("")
+        text.setId("InputCellText")
 
         val container = new HBox(text)
-        container.setAlignment(Pos.CENTER)
-        container.setPadding(new Insets(1))
+        container.setId("InputCell")
         HBox.setHgrow(text, Priority.ALWAYS)
-        container.setStyle("-fx-background-color: black")
         container.setOnMouseClicked(KakuroController.selectedCellHandler(container))
 
         container
 
       case _: KakuroEmptyCell =>
+
         val textField = new TextField()
+
         val container = new HBox(textField)
-        container.setAlignment(Pos.CENTER)
-        container.setPadding(new Insets(1))
+        container.setId("EmptyCell")
         HBox.setHgrow(textField, Priority.ALWAYS)
-        container.setStyle("-fx-background-color: red")
 
         container
 

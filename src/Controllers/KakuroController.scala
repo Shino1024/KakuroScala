@@ -3,6 +3,7 @@ package Controllers
 import Models._
 import javafx.scene.input.MouseEvent
 import javafx.event.{ActionEvent, EventHandler}
+import javafx.scene.Node
 import javafx.scene.layout.HBox
 import javafx.scene.text.Text
 
@@ -11,15 +12,18 @@ import scala.util.Random
 
 object KakuroController {
 
-  private var kakuroBoard: KakuroBoard = new KakuroBoard(Settings.boardSize)
+  private val kakuroBoard: KakuroBoard = new KakuroBoard(Settings.boardSize)
+
+  private var selectedCell: HBox = _
 
 
-  def selectedCellHandler(container: HBox): EventHandler[MouseEvent] = {
+  def selectedCellHandler(cell: HBox): EventHandler[MouseEvent] = {
+
     val handler = new EventHandler[MouseEvent] {
-      def handle(e: MouseEvent): Unit = {
-        print("Container touched!")
-        container.getChildren.get(0).setStyle("-fx-background-color: green")
 
+      def handle(e: MouseEvent): Unit = {
+
+        changeCellSelection(cell)
 
       }
     }
@@ -27,6 +31,52 @@ object KakuroController {
     handler
   }
 
+
+  def numberBtnHandler(text: String): EventHandler[ActionEvent] = {
+
+    val handler = new EventHandler[ActionEvent] {
+
+      def handle(e: ActionEvent): Unit = {
+
+        changeSelectedCellText(text)
+
+      }
+    }
+
+    handler
+  }
+
+
+  private def changeCellSelection(cell: HBox):Unit = {
+
+    if(selectedCell == null){
+
+      cell.setId("SelectedInputCell")
+      selectedCell = cell
+
+    } else {
+
+      selectedCell.setId("InputCell")
+      cell.setId("SelectedInputCell")
+      selectedCell = cell
+
+    }
+  }
+
+
+  private def changeSelectedCellText(text: String): Unit = {
+
+    if(selectedCell != null) {
+
+      val node: Node = selectedCell.getChildren.get(0)
+
+      if(node.isInstanceOf[Text]){
+
+        node.asInstanceOf[Text].setText(text)
+
+      }
+    }
+  }
 
 
   def   generateCellBoard(): KakuroBoard = {
