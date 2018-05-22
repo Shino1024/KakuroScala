@@ -26,7 +26,8 @@ object IntroController {
       }
     }
 
-    handler  }
+    handler
+  }
 
   def quitBtnHandlerEvent(stage: Stage): EventHandler[ActionEvent] = {
     val handler = new EventHandler[ActionEvent] {

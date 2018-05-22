@@ -1,11 +1,6 @@
 package Controllers
 
 import Models._
-import javafx.geometry.{Insets, Pos}
-import javafx.scene.control.{Button, TextField}
-import javafx.scene.layout.{HBox, Priority}
-import javafx.scene.paint.Color
-import javafx.scene.text.{Font, Text}
 
 import scala.util.Random
 
@@ -14,7 +9,7 @@ object KakuroController {
   private var kakuroBoard: KakuroBoard = new KakuroBoard(Settings.boardSize)
 
 
-  def   generateCellBoard(): KakuroBoard = {
+  def generateCellBoard(): KakuroBoard = {
 
     val logicboard = generateLogicBoard(Settings.boardSize.id, Settings.boardSize.id)
 
@@ -74,28 +69,29 @@ object KakuroController {
     }
 
     //3 CENTER
-    for(i <- 1 until colSize/2)
-      if(board(rowSize/2 )(i-1) == 1) {
-        if(i == 1){
+    for (i <- 1 until colSize/2) {
+      if (board(rowSize / 2)(i - 1) == 1) {
+        if (i == 1) {
           board(rowSize / 2)(i) = 1
           board(rowSize / 2)(colSize - i - 1) = 1
 
-        } else{
+        } else {
           board(rowSize / 2)(i) = 0
           board(rowSize / 2)(colSize - i - 1) = 0
         }
-      }else{
-        board(rowSize / 2 )(i) = 1
-        board(rowSize / 2 )(colSize - i - 1) = 1
+      } else {
+        board(rowSize / 2)(i) = 1
+        board(rowSize / 2)(colSize - i - 1) = 1
       }
+    }
 
-    if(colSize % 2 == 1 ) board(rowSize/2 )(colSize/2) = 1
+    if (colSize % 2 == 1) board(rowSize/2)(colSize/2) = 1
 
 
     //4. RANDOMIZE THE REST
-    for(i <- 1 until (rowSize / 2)){
-      for(j <- 1 until colSize) {
-        if(board(i)(j) == -1) {
+    for (i <- 1 until (rowSize / 2)){
+      for (j <- 1 until colSize) {
+        if (board(i)(j) == -1) {
           board(i)(j) = (Random.nextFloat() + 0.8).toInt
           board(rowSize - i - 1)(colSize - j - 1) = board(i)(j)
         }
@@ -126,7 +122,6 @@ object KakuroController {
     }
 
     board
-
   }
 
 

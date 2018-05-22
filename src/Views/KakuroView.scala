@@ -15,15 +15,6 @@ import javafx.scene.text.Text
 import javafx.scene.text.Font
 
 import scala.util.Random
-//
-//object KakuroView
-//{
-//  def main(args: Array[String])
-//  {
-//    Application.launch(classOf[KakuroView], args: _*)
-//  }
-//}
-
 
 class KakuroView extends App {
 
@@ -54,7 +45,7 @@ class KakuroView extends App {
 
         text.setFont(Font.font("Fira Code", 15))
         text.setFill(Color.WHITE)
-        text.setText(" " + (kakuroCell.getVValue.toString)  + "\n    " + kakuroCell.getHValue.toString + " ")
+        text.setText(" " + kakuroCell.getVValue.toString  + "\n    " + kakuroCell.getHValue.toString + " ")
 
         val container = new HBox(text)
         container.setPrefHeight(400)
