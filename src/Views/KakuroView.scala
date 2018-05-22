@@ -14,6 +14,8 @@ import javafx.scene.paint.Color
 import javafx.scene.text.Text
 import javafx.scene.text.Font
 
+import Controllers.KakuroController
+
 import scala.util.Random
 
 class KakuroView extends App {
@@ -57,15 +59,20 @@ class KakuroView extends App {
         container
 
       case _: KakuroInputCell =>
-        val textField = new TextField()
-        textField.setPrefHeight(400)
-        textField.setStyle("-fx-background-color: white")
 
-        val container = new HBox(textField)
+        val text = new Text
+        text.setFont(Font.font("Fira Code", 25))
+        text.setFill(Color.WHITE)
+        text.setText("2")
+        text.setStyle("-fx-background-color: white")
+
+
+        val container = new HBox(text)
         container.setAlignment(Pos.CENTER)
         container.setPadding(new Insets(1))
-        HBox.setHgrow(textField, Priority.ALWAYS)
+        HBox.setHgrow(text, Priority.ALWAYS)
         container.setStyle("-fx-background-color: black")
+        container.setOnMouseClicked(KakuroController.selectedCellHandler(container))
 
         container
 

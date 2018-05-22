@@ -1,15 +1,35 @@
 package Controllers
 
 import Models._
+import javafx.scene.input.MouseEvent
+import javafx.event.{ActionEvent, EventHandler}
+import javafx.scene.layout.HBox
+import javafx.scene.text.Text
 
 import scala.util.Random
+
 
 object KakuroController {
 
   private var kakuroBoard: KakuroBoard = new KakuroBoard(Settings.boardSize)
 
 
-  def generateCellBoard(): KakuroBoard = {
+  def selectedCellHandler(container: HBox): EventHandler[MouseEvent] = {
+    val handler = new EventHandler[MouseEvent] {
+      def handle(e: MouseEvent): Unit = {
+        print("Container touched!")
+        container.getChildren.get(0).setStyle("-fx-background-color: green")
+
+
+      }
+    }
+
+    handler
+  }
+
+
+
+  def   generateCellBoard(): KakuroBoard = {
 
     val logicboard = generateLogicBoard(Settings.boardSize.id, Settings.boardSize.id)
 
