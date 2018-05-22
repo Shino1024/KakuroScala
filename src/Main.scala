@@ -5,11 +5,13 @@ import javafx.scene.control.Button
 import javafx.scene.layout.StackPane
 import javafx.stage.Stage
 
+import Apps.IntroApp
+
 object Main
 {
   def main(args: Array[String])
   {
-    Application.launch(classOf[Main], args: _*)
+    Application.launch(classOf[IntroApp], args: _*)
   }
 }
 

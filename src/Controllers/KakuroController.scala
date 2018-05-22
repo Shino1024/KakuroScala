@@ -10,7 +10,29 @@ import javafx.scene.text.{Font, Text}
 import scala.util.Random
 
 object KakuroController {
+
   private var kakuroBoard: KakuroBoard = new KakuroBoard(Settings.boardSize)
+
+
+  def   generateCellBoard(): KakuroBoard = {
+
+    val logicboard = generateLogicBoard(Settings.boardSize.id, Settings.boardSize.id)
+
+    for(i <- 0 until Settings.boardSize.id) {
+      for (j <- 0 until Settings.boardSize.id) {
+
+        logicboard(i)(j) match {
+
+          case 1 => kakuroBoard.setMatrixCell(i, j, new KakuroInputCell)
+          case 0 => kakuroBoard.setMatrixCell(i, j, new KakuroHintCell(Random.nextInt(34) + 9, Random.nextInt(34) + 9))
+          case _ => print("error value :/")
+        }
+      }
+    }
+
+    kakuroBoard
+  }
+
 
   def generateLogicBoard(rowSize:Int, colSize:Int): Array[Array[Int]] = {
 
@@ -30,6 +52,7 @@ object KakuroController {
     //ROWS
     for(i <- 0 until colSize) {
       board(0)(i) = Random.nextInt(2) // range of {0,1}
+
       board(rowSize - 1)(colSize - i - 1) = board(0)(i)
       //2. ROW 2 AND N-1
       if (board(0)(i) == 1 && i != colSize - 1 && i != 0) {
@@ -105,5 +128,6 @@ object KakuroController {
     board
 
   }
+
 
 }

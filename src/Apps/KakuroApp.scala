@@ -13,8 +13,8 @@ class KakuroApp extends Application {
   override def start(primaryStage: Stage) {
     primaryStage.setTitle("KAKURO MY DEAR!")
 
-    val logicBoard = KakuroController.generateLogicBoard(Settings.boardSize.id, Settings.boardSize.id)
-    val root = KakuroController.fillScene(logicBoard, Settings.boardSize.id, Settings.boardSize.id)
+    val cellBoard = KakuroController.generateCellBoard()
+    val root = kakuroView.fillScene(cellBoard, Settings.boardSize.id, Settings.boardSize.id)
 
     val scene = new Scene(root, 700, 600)
     scene.getStylesheets.add("Views/styles/styles.css")

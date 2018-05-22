@@ -2,4 +2,7 @@ package Models
 
 class KakuroCell {
 
+
+
+
 }

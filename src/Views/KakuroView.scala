@@ -1,6 +1,6 @@
 package Views
 
-import Models.{KakuroCell, KakuroEmptyCell, KakuroHintCell, KakuroInputCell}
+import Models._
 import javafx.application.Application
 import javafx.geometry.Insets
 import javafx.scene.Scene
@@ -48,12 +48,13 @@ class KakuroView extends App {
 
   def createContainer(kakuroCell: KakuroCell): HBox = {
     kakuroCell match {
-      case _: KakuroHintCell =>
+
+      case kakuroCell: KakuroHintCell =>
         val text = new Text
 
         text.setFont(Font.font("Fira Code", 15))
         text.setFill(Color.WHITE)
-        text.setText( " " + (Random.nextInt(34) + 9).toString  + "\n    " + (Random.nextInt(34) + 9).toString + " ")
+        text.setText(" " + (kakuroCell.getVValue.toString)  + "\n    " + kakuroCell.getHValue.toString + " ")
 
         val container = new HBox(text)
         container.setPrefHeight(400)
@@ -90,11 +91,11 @@ class KakuroView extends App {
     }
   }
 
-  def fillScene(board: Array[Array[Int]], rowSize: Int, colSize: Int): GridPane  = {
+  def fillScene(cellBoard: KakuroBoard, rowSize: Int, colSize: Int): GridPane  = {
     val root = new GridPane
     for(i <- 0 until rowSize){
       for( j <- 0 until colSize){
-        root.add(createContainer(board(i)(j)), j + 1 , i + 1)
+        root.add(createContainer(cellBoard.getMatrixCell(i,j)), j + 1 , i + 1)
       }
     }
 

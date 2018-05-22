@@ -4,7 +4,7 @@ import Apps.KakuroApp
 import javafx.event.{ActionEvent, EventHandler}
 import javafx.stage.Stage
 
-object IntroController extends App {
+object IntroController {
 
   def playBtnHandlerEvent(stage: Stage): EventHandler[ActionEvent] = {
     val handler = new EventHandler[ActionEvent] {
@@ -17,11 +17,27 @@ object IntroController extends App {
     handler
   }
 
+
   def highscoreBtnHandlerEvent(stage: Stage): EventHandler[ActionEvent] = {
-    // Display highscores from the database.
-  }
+    val handler = new EventHandler[ActionEvent] {
+      def handle(e: ActionEvent): Unit = {
+
+        printf("Highscores will be available soon ;)")
+      }
+    }
+
+    handler  }
 
   def quitBtnHandlerEvent(stage: Stage): EventHandler[ActionEvent] = {
-    // Quit the game.
+    val handler = new EventHandler[ActionEvent] {
+      def handle(e: ActionEvent): Unit = {
+
+        printf("Quit will be available soon ;)")
+
+      }
+    }
+
+    handler
   }
+
 }

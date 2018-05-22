@@ -5,15 +5,15 @@ import java.io.{File, FileInputStream}
 import Models.BoardSize.BoardSize
 
 import scala.collection.{mutable => m}
-import scala.util.Marshal
+//import scala.util.Marshal
 
 object HighscoreDatabase {
   private val DATABASE_SIZE = 5
   private var highscoreMap: m.HashMap[BoardSize, List[Highscore]] = new m.HashMap[BoardSize, List[Highscore]]()
 
-  def fetchHighscores(boardSize: BoardSize): List[Highscore] = {
-    highscoreMap.get(boardSize)
-  }
+  //def fetchHighscores(boardSize: BoardSize): List[Highscore] = {
+  //  highscoreMap.get(boardSize)
+  //}
 
   def updateHighscores(newHighscore: Highscore, boardSize: BoardSize): Unit = {
     highscoreMap.get(boardSize) match {
@@ -37,7 +37,7 @@ object HighscoreDatabase {
   def parseHighscores(): Unit = {
     val in = new FileInputStream("result.txt")
     val bytes = Stream.continually(in.read).takeWhile(-1 !=).map(_.toByte).toArray
-    highscoreMap = Marshal.load[highscoreMap.type](bytes)
+ //   highscoreMap = Marshal.load[highscoreMap.type](bytes)
 //    val mapper = new ObjectMapper()
 //    highscoreMap = mapper.readValue(new File("results.txt"), highscoreMap.)
   }
