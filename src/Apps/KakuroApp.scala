@@ -16,7 +16,7 @@ class KakuroApp extends Application {
     val cellBoard = KakuroController.generateCellBoard()
     val root = kakuroView.fillScene(cellBoard, Settings.boardSize.id, Settings.boardSize.id)
 
-    val scene = new Scene(root, 700, 600)
+    val scene = new Scene(root, 700, 700)
     scene.getStylesheets.add("Views/styles/styles.css")
 
     primaryStage.setScene(scene)

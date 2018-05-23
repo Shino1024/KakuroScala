@@ -1,22 +1,12 @@
 package Views
 
 import Models._
-import javafx.application.Application
-import javafx.geometry.Insets
-import javafx.scene.Scene
 import javafx.scene.control.{Button, TextField}
-import javafx.scene.layout.GridPane
-import javafx.stage.Stage
-import javafx.geometry.Pos
-import javafx.scene.layout.HBox
-import javafx.scene.layout.Priority
-import javafx.scene.paint.Color
-import javafx.scene.text.Text
-import javafx.scene.text.Font
+import javafx.scene.layout.{GridPane, HBox, Priority, StackPane}
 
+import javafx.scene.text.Text
 import Controllers.KakuroController
 
-import scala.util.Random
 
 class KakuroView extends App {
 
@@ -48,11 +38,24 @@ class KakuroView extends App {
 
         val text = new Text
         text.setId("HintCellText")
-        text.setText(" " + kakuroCell.getVValue.toString  + "\n    " + kakuroCell.getHValue.toString + " ")
+
+        (kakuroCell.getVValue, kakuroCell.getHValue) match {
+
+            case (0, 0) =>
+              text.setText("")
+
+            case (0, value) if value != 0 =>
+              text.setText (" \n    " + value.toString + " ")
+
+            case  (value, 0) if value != 0 =>
+              text.setText (" " + value.toString + "\n ")
+
+            case (value1, value2) =>
+              text.setText (" " + value1.toString + "\n    " + value2.toString + " ")
+        }
 
         val container = new HBox(text)
         container.setId("HintCell")
-        HBox.setHgrow(text, Priority.ALWAYS)
 
         container
 

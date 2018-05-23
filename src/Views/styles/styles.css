@@ -74,13 +74,13 @@
 #HintCell{
 
     -fx-alignment: center;
-    -fx-background-color: linear-gradient(to right bottom, #2f3441 50%, #212531 50%);
-    -fx-border-color:  black;
-    -fx-border-width: 1;
+    -fx-background-color:
+        linear-gradient(to right bottom, #4d5261 50%, #212531 50%);
     -fx-pref-height: 400;
 
 
 }
+
 
 #HintCellText{
 
