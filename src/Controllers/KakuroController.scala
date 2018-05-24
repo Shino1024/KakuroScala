@@ -6,6 +6,7 @@ import javafx.event.{ActionEvent, EventHandler}
 import javafx.scene.Node
 import javafx.scene.layout.HBox
 import javafx.scene.text.Text
+import javafx.stage.Stage
 
 import scala.util.control.Breaks._
 import scala.util.Random
@@ -19,20 +20,7 @@ object KakuroController {
   private var selectedCell: HBox = _
 
 
-  def selectedCellHandler(cell: HBox): EventHandler[MouseEvent] = {
-
-    val handler = new EventHandler[MouseEvent] {
-
-      def handle(e: MouseEvent): Unit = {
-
-        changeCellSelection(cell)
-
-      }
-    }
-
-    handler
-  }
-
+  //BUTTON HANDLING
 
   def numberBtnHandler(text: String): EventHandler[ActionEvent] = {
 
@@ -48,6 +36,58 @@ object KakuroController {
     handler
   }
 
+
+  def quitBtnHandlerEvent(): EventHandler[ActionEvent] = {
+    val handler = new EventHandler[ActionEvent] {
+      def handle(e: ActionEvent): Unit = {
+
+        printf("Quit will be available soon ;)\n")
+
+      }
+    }
+
+    handler
+  }
+
+  def checkBtnHandlerEvent(): EventHandler[ActionEvent] = {
+    val handler = new EventHandler[ActionEvent] {
+      def handle(e: ActionEvent): Unit = {
+
+        printf("Check will be available soon ;)\n")
+
+      }
+    }
+
+    handler
+  }
+
+  def newBoardBtnHandlerEvent(): EventHandler[ActionEvent] = {
+    val handler = new EventHandler[ActionEvent] {
+      def handle(e: ActionEvent): Unit = {
+
+        printf("Check will be available soon ;)\n")
+
+      }
+    }
+
+    handler
+  }
+
+  //CELL HANDLING
+
+  def selectedCellHandler(cell: HBox): EventHandler[MouseEvent] = {
+
+    val handler = new EventHandler[MouseEvent] {
+
+      def handle(e: MouseEvent): Unit = {
+
+        changeCellSelection(cell)
+
+      }
+    }
+
+    handler
+  }
 
   private def changeCellSelection(cell: HBox):Unit = {
 
@@ -65,7 +105,6 @@ object KakuroController {
     }
   }
 
-
   private def changeSelectedCellText(text: String): Unit = {
 
     if(selectedCell != null) {
@@ -82,18 +121,20 @@ object KakuroController {
 
 
 
+  //BOARD GENERATORS
+
   def   generateCellBoard(): KakuroBoard = {
 
-    val logicboard = generateLogicBoard(Settings.boardSize.id, Settings.boardSize.id)
+    val logicBoard = generateLogicBoard(Settings.boardSize.id, Settings.boardSize.id)
 
-    val markedboard =  Array.ofDim[Int](Settings.boardSize.id,Settings.boardSize.id)
+    val markedBoard =  Array.ofDim[Int](Settings.boardSize.id,Settings.boardSize.id)
 
     //WE NEED TO MARK THE BOARD IN ORDER TO MAKE SURE EVERY CELL I COVERED BY DEFINED SUM,
     // AND THERE ARE NO MULTIPLE SUMS FOR ROW OR COLUMN
     for(i <- 0 until Settings.boardSize.id) {
       for (j <- 0 until Settings.boardSize.id) {
 
-          markedboard(i)(j) = 0
+          markedBoard(i)(j) = 0
 
         }
       }
@@ -102,91 +143,92 @@ object KakuroController {
     for(i <- 0 until Settings.boardSize.id) {
       for (j <- 0 until Settings.boardSize.id) {
 
-        logicboard(i)(j) match {
+        logicBoard(i)(j) match {
 
           case 1 => kakuroBoard.setMatrixCell(i, j, new KakuroInputCell)
 
-          case 0 => {
+          case 0 =>
 
-            val kakuroCell = new KakuroHintCell(0,0)
-
-            (i, j) match {
-
-              case (0, _j) => {
-
-                if ( _j + 1 != Settings.boardSize.id && (markedboard(0)(_j + 1) == 0 && logicboard(0)(_j + 1) != 0)) {
-
-                  val loop = new Breaks
-                  loop.breakable {
-                    for (k <- _j until Settings.boardSize.id) {
+            val kakuroCell = new KakuroHintCell(0, 0)
 
 
-                      if (logicboard(0)(k) == 0 && k != _j) {
-                        loop.break
-                      } else {
-                        markedboard(0)(k) = 1
-                      }
-                    }
+
+            //UP DIRECTION
+            if (i - 1 >= 0 && markedBoard(i - 1)(j) == 0 && logicBoard(i - 1)(j) == 1) {
+
+              val loop = new Breaks
+              loop.breakable {
+                for (k <- i to 0 by -1) {
+
+                  if (logicBoard(k)(j) == 0 && k != i) {
+                    loop.break
+                  } else {
+                    markedBoard(k)(j) = 1
                   }
-                  kakuroCell.setHValue(Random.nextInt(34) + 1)
                 }
-
-                if (markedboard(1)(_j) == 0  && logicboard(1)(_j) != 0) {
-
-                  val loop = new Breaks
-                  loop.breakable {
-                    for (k <- 0 until Settings.boardSize.id) {
-
-                      if (logicboard(k)(_j) == 0 && k != 0){
-                        loop.break
-                      } else {
-                        markedboard(k)(_j) = 1
-                      }
-                    }
-                  }
-                    kakuroCell.setHValue(Random.nextInt(34) + 1)
-
-                }
-
-                if (_j - 1 >= 0 && (markedboard(0)(_j - 1) == 0 && logicboard(0)(_j - 1) != 0) ) {
-
-                  val loop = new Breaks
-                  loop.breakable {
-                    for (k <- _j to 0 by -1) {
-
-                      if (logicboard(0)(k) == 0 && k != _j) {
-                        loop.break
-                      } else {
-                        markedboard(0)(k) = 1
-                      }
-                    }
-                  }
-                  kakuroCell.setVValue(Random.nextInt(34) + 1)
-                }
-
-                if(markedboard(0)(_j) == 0) {
-                  markedboard(0)(_j) = 1
-                }
-
-
-
-
-                kakuroBoard.setMatrixCell(i,j,kakuroCell)
               }
+              kakuroCell.setVValue(Random.nextInt(34) + 1)
+            }
 
+            //DOWN DIRECTION
+            if (i + 1 < Settings.boardSize.id && markedBoard(i + 1)(j) == 0 && logicBoard(i + 1)(j) != 0) {
 
+              val loop = new Breaks
+              loop.breakable {
+                for (k <- i to 0 by -1) {
 
-              case (_,_) =>{
-
-                kakuroCell.setHValue(-1)
-                kakuroCell.setVValue(-1)
-                kakuroBoard.setMatrixCell(i,j,kakuroCell)
+                  if (logicBoard(k)(j) == 0 && k != i) {
+                    loop.break
+                  } else {
+                    markedBoard(k)(j) = 1
+                  }
+                }
               }
+              kakuroCell.setHValue(Random.nextInt(34) + 1)
+            }
+
+            //RIGHT DIRECTION
+            if (j + 1 < Settings.boardSize.id && markedBoard(i)(j + 1) == 0 && logicBoard(i)(j + 1) != 0) {
+
+              val loop = new Breaks
+              loop.breakable {
+                for (k <- j until Settings.boardSize.id) {
+
+                  if (logicBoard(i)(k) == 0 && k != j) {
+                    loop.break
+                  } else {
+                    markedBoard(i)(k) = 1
+                  }
+                }
+              }
+              kakuroCell.setHValue(Random.nextInt(34) + 1)
 
             }
 
 
-          }
+            //LEFT DIRECTION
+            if (j - 1 >= 0 && (markedBoard(i)(j - 1) == 0 && logicBoard(i)(j - 1) != 0)) {
+
+              val loop = new Breaks
+              loop.breakable {
+                for (k <- j to 0 by -1) {
+
+                  if (logicBoard(i)(k) == 0 && k != j) {
+                    loop.break
+                  } else {
+                    markedBoard(i)(k) = 1
+                  }
+                }
+              }
+              kakuroCell.setVValue(Random.nextInt(34) + 1)
+            }
+
+            //WHEN BLACK CELL DON'T NEED TO HAVE NUMBER, BUT WE HAVE TO MARKED IT AS COVERED
+            markedBoard(i)(j) = 1
+
+            kakuroBoard.setMatrixCell(i, j, kakuroCell)
+
+
           case _ => print("error value :/")
         }
       }
@@ -196,13 +238,13 @@ object KakuroController {
 
     for(i <- 0 until Settings.boardSize.id){
       for(j <- 0 until Settings.boardSize.id){
-        print(markedboard(i)(j) + " ")
+        print(markedBoard(i)(j) + " ")
       }
       print("\n")
     }
 
 
-    kakuroBoard
+  kakuroBoard
   }
 
 

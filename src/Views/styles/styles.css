@@ -17,6 +17,10 @@
     -fx-background-color: linear-gradient(#212531, #2f3441);
 }
 
+#Button:pressed {
+    -fx-background-color: linear-gradient(#0f0f0f, #2f3441);
+}
+
 #ButtonContainer {
 
     -fx-padding: 10;
@@ -98,7 +102,7 @@
 
     -fx-alignment: center;
     -fx-pref-height: 400;
-    -fx-background-color: red;
+    -fx-background-color: #0f0f0f;
     -fx-padding: 1;
 
 
