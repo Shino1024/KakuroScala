@@ -17,7 +17,6 @@ import javafx.scene.text.Font
 import scala.util.Random
 
 class KakuroView extends App {
-
   def createEmptyContainer(): HBox = {
     val emptyContainer = new HBox
     emptyContainer.setId("ButtonContainer")
