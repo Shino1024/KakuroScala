@@ -11,10 +11,11 @@ object HighscoreDatabase {
   private val DATABASE_SIZE = 5
   private var highscoreMap: m.HashMap[BoardSize, List[Highscore]] = new m.HashMap[BoardSize, List[Highscore]]()
 
-  //def fetchHighscores(boardSize: BoardSize): List[Highscore] = {
-  //  highscoreMap.get(boardSize)
-  //}
+  def fetchHighscores(boardSize: BoardSize): List[Highscore] = {
+    highscoreMap.get(boardSize)
+  }
 
+  // TODO: Refactor this _somehow_.
   def updateHighscores(newHighscore: Highscore, boardSize: BoardSize): Unit = {
     highscoreMap.get(boardSize) match {
       case Some(highscores) =>
