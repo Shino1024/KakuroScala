@@ -1,14 +1,13 @@
 package Controllers
 
 import Models._
+import javafx.application.Platform
 import javafx.scene.input.MouseEvent
 import javafx.event.{ActionEvent, EventHandler}
 import javafx.scene.Node
 import javafx.scene.layout.HBox
 import javafx.scene.text.Text
-import javafx.stage.Stage
 
-import scala.util.control.Breaks._
 import scala.util.Random
 import scala.util.control.Breaks
 
@@ -19,30 +18,22 @@ object KakuroController {
 
   private var selectedCell: HBox = _
 
-
   //BUTTON HANDLING
-
   def numberBtnHandler(text: String): EventHandler[ActionEvent] = {
-
     val handler = new EventHandler[ActionEvent] {
-
       def handle(e: ActionEvent): Unit = {
-
         changeSelectedCellText(text)
-
       }
     }
 
     handler
   }
 
-
   def quitBtnHandlerEvent(): EventHandler[ActionEvent] = {
     val handler = new EventHandler[ActionEvent] {
       def handle(e: ActionEvent): Unit = {
-
-        printf("Quit will be available soon ;)\n")
-
+        Platform.exit()
+        System.exit(0)
       }
     }
 

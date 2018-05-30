@@ -1,6 +1,5 @@
 package Views
 
-import javafx.application.Application
 import javafx.scene.Scene
 import javafx.scene.control.Button
 import javafx.scene.layout.{GridPane, HBox, Priority}
@@ -9,7 +8,15 @@ import javafx.stage.Stage
 import Controllers.IntroController
 import javafx.event.{ActionEvent, EventHandler}
 
-class IntroView extends Application {
+class IntroView extends GenericView {
+
+  private[this] var stage: Stage = _
+
+  def setStage(_stage: Stage): Unit = {
+    if (stage == null) {
+      stage = _stage
+    }
+  }
 
   def createButton(text :String, stage: Stage, handler: Stage => EventHandler[ActionEvent]): HBox = {
     val button = new Button
@@ -34,7 +41,7 @@ class IntroView extends Application {
     container
   }
 
-  def generateIntroLayout(stage: Stage): GridPane = {
+  def generateIntroLayout(): GridPane = {
     val gridPane = new GridPane
 
     gridPane.add(createText("KAKURO MY DEAR!"), 1, 0)
@@ -46,19 +53,11 @@ class IntroView extends Application {
     gridPane
   }
 
-  def generateScene(gridPane: GridPane): Scene = {
-    val scene = new Scene(gridPane, 400, 400)
+  override def generateScene: Scene = {
+    val root = generateIntroLayout()
+    val scene = new Scene(root, 400, 400)
 
     scene
-  }
-
-  override def start(primaryStage: Stage) {
-    val root = generateIntroLayout(primaryStage)
-    val scene = generateScene(root)
-
-    scene.getStylesheets.add("Views/styles/styles.css")
-    primaryStage.setScene(scene)
-    primaryStage.show()
   }
 
 }

@@ -1,11 +1,11 @@
 package Controllers
 
-import Apps.KakuroApp
+import Apps.{HighscoreApp, KakuroApp}
+import javafx.application.Platform
 import javafx.event.{ActionEvent, EventHandler}
 import javafx.stage.Stage
 
 object IntroController {
-
   def playBtnHandlerEvent(stage: Stage): EventHandler[ActionEvent] = {
     val handler = new EventHandler[ActionEvent] {
       def handle(e: ActionEvent): Unit = {
@@ -17,12 +17,11 @@ object IntroController {
     handler
   }
 
-
   def highscoreBtnHandlerEvent(stage: Stage): EventHandler[ActionEvent] = {
     val handler = new EventHandler[ActionEvent] {
       def handle(e: ActionEvent): Unit = {
-
-        printf("Highscores will be available soon ;)")
+        val highscoreApp: HighscoreApp = new HighscoreApp
+        highscoreApp.start(stage)
       }
     }
 
@@ -32,9 +31,8 @@ object IntroController {
   def quitBtnHandlerEvent(stage: Stage): EventHandler[ActionEvent] = {
     val handler = new EventHandler[ActionEvent] {
       def handle(e: ActionEvent): Unit = {
-
-        printf("Quit will be available soon ;)")
-
+        Platform.exit()
+        System.exit(0)
       }
     }
 

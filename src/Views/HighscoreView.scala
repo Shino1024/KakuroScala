@@ -11,7 +11,7 @@ import javafx.scene.text.Text
 import scala.collection.JavaConverters._
 import scala.collection.mutable.ListBuffer
 
-class HighscoreView {
+class HighscoreView extends GenericView {
   var highscoreTables: List[TableView[Highscore]] = List()
 
   val highscoreColumnTitles: List[String] = List(
@@ -57,8 +57,7 @@ class HighscoreView {
     tablesPane
   }
 
-  // TODO: Make a generic View with abstract generateScene method.
-  def generateScene(): Scene = {
+  override def generateScene: Scene = {
     val root = generateTables()
     new Scene(root, Settings.menuHeight, Settings.menuWidth)
   }
