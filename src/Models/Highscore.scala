@@ -1,5 +1,9 @@
 package Models
 
-import java.util.Date
+import java.time.{LocalDate, LocalTime}
 
-case class Highscore(name: String, date: Date, time: Date)
+import scala.beans.BeanProperty
+
+case class Highscore(@BeanProperty name: String,
+                     @BeanProperty date: LocalDate,
+                     @BeanProperty time: LocalTime)

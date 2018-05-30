@@ -8,4 +8,6 @@ object Settings {
 
   val menuHeight = 480
   val menuWidth = 480
+
+  val highscoreFilename = "highscores.txt"
 }

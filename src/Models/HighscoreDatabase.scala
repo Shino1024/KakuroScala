@@ -1,11 +1,12 @@
 package Models
 
-import java.io.{File, FileInputStream}
+import java.io._
+import java.time.{LocalDate, LocalTime}
 
 import Models.BoardSize.BoardSize
+import Util.Settings
 
 import scala.collection.{mutable => m}
-//import scala.util.Marshal
 
 object HighscoreDatabase {
   private val DATABASE_SIZE = 5
@@ -14,7 +15,7 @@ object HighscoreDatabase {
   def fetchHighscores(boardSize: BoardSize): List[Highscore] = {
     highscoreMap.get(boardSize) match {
       case Some(highscores) => highscores
-      case None => throw new NoSuchElementException("Scores for given board size weren't found.")
+      case None => List()
     }
   }
 
@@ -23,7 +24,7 @@ object HighscoreDatabase {
     highscoreMap.get(boardSize) match {
       case Some(highscores) =>
         for ((highscore, i) <- highscores.zipWithIndex) {
-          if (highscore.time.after(newHighscore.time)) {
+          if (highscore.time.isAfter(newHighscore.time)) {
             val newHighscores = highscores.take(i) ++ List(highscore) ++ highscores.drop(i)
             if (newHighscores.length > DATABASE_SIZE) {
               highscoreMap.update(boardSize, newHighscores.drop(DATABASE_SIZE))
@@ -39,15 +40,50 @@ object HighscoreDatabase {
   }
 
   def parseHighscores(): Unit = {
-    val in = new FileInputStream("result.txt")
-    val bytes = Stream.continually(in.read).takeWhile(-1 !=).map(_.toByte).toArray
- //   highscoreMap = Marshal.load[highscoreMap.type](bytes)
-//    val mapper = new ObjectMapper()
-//    highscoreMap = mapper.readValue(new File("results.txt"), highscoreMap.)
+    val in = new ObjectInputStream(new FileInputStream(Settings.highscoreFilename))
+    highscoreMap = in.readObject().asInstanceOf[m.HashMap[BoardSize, List[Highscore]]]
+
+    in.close()
   }
 
   def saveHighscores(): Unit = {
-//    val mapper = new ObjectMapper()
-//    mapper.writeValue(new File("results.json"), highscoreMap)
+    val out = new ObjectOutputStream(new FileOutputStream(Settings.highscoreFilename))
+    highscoreMap.update(BoardSize.SMALL, List(
+      Highscore(
+      "lol",
+      LocalDate.of(2017, 2, 3),
+      LocalTime.of(0, 3, 4, 0)
+    ), Highscore(
+      "xd",
+        LocalDate.of(2017, 2, 3),
+        LocalTime.of(0, 3, 5, 0)
+    )))
+
+    highscoreMap.update(BoardSize.BIG, List(
+    Highscore(
+      "xd",
+      LocalDate.of(2017, 2, 3),
+      LocalTime.of(0, 3, 5, 0)
+    ), Highscore(
+      "xd",
+        LocalDate.of(2017, 2, 3),
+        LocalTime.of(0, 3, 8, 0)
+    ), Highscore(
+      "xd",
+        LocalDate.of(2017, 2, 3),
+        LocalTime.of(0, 3, 15, 0)
+    ), Highscore(
+      "xd",
+        LocalDate.of(2017, 2, 3),
+        LocalTime.of(0, 4, 5, 0)
+    ), Highscore(
+      "xd",
+        LocalDate.of(2017, 2, 3),
+        LocalTime.of(1, 3, 5, 0)
+    )))
+
+    out.writeObject(highscoreMap)
+
+    out.close()
   }
 }

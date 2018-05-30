@@ -9,7 +9,6 @@ object IntroController {
   def playButtonEventHandler(stage: Stage): EventHandler[ActionEvent] = {
     val handler = new EventHandler[ActionEvent] {
       def handle(e: ActionEvent): Unit = {
-        println("playBtnHandlerEvent")
         val kakuroApp: KakuroApp = new KakuroApp
         kakuroApp.start(stage)
       }

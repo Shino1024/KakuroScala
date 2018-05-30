@@ -19,7 +19,6 @@ class IntroView extends GenericView {
   def generateActionButton(introButton: IntroButton): HBox = {
     actionButtonHandlers.get(introButton) match {
       case Some(handler) =>
-        println("AAAA")
         generateButton(introButton.name, handler)
       case None => throw new Exception("The " + introButton.name.toLowerCase + " handler hasn't been installed.")
     }
