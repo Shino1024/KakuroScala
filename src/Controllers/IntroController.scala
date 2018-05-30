@@ -6,7 +6,7 @@ import javafx.event.{ActionEvent, EventHandler}
 import javafx.stage.Stage
 
 object IntroController {
-  def playBtnHandlerEvent(stage: Stage): EventHandler[ActionEvent] = {
+  def playButtonEventHandler(stage: Stage): EventHandler[ActionEvent] = {
     val handler = new EventHandler[ActionEvent] {
       def handle(e: ActionEvent): Unit = {
         println("playBtnHandlerEvent")
@@ -18,7 +18,7 @@ object IntroController {
     handler
   }
 
-  def highscoreBtnHandlerEvent(stage: Stage): EventHandler[ActionEvent] = {
+  def highscoreButtonEventHandler(stage: Stage): EventHandler[ActionEvent] = {
     val handler = new EventHandler[ActionEvent] {
       def handle(e: ActionEvent): Unit = {
         val highscoreApp: HighscoreApp = new HighscoreApp
@@ -29,7 +29,7 @@ object IntroController {
     handler
   }
 
-  def quitBtnHandlerEvent(stage: Stage): EventHandler[ActionEvent] = {
+  def quitButtonEventHandler(stage: Stage): EventHandler[ActionEvent] = {
     val handler = new EventHandler[ActionEvent] {
       def handle(e: ActionEvent): Unit = {
         Platform.exit()

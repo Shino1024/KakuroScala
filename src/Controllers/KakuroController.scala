@@ -1,5 +1,6 @@
 package Controllers
 
+import Apps.IntroApp
 import Models._
 import Util.Settings
 import javafx.application.Platform
@@ -8,6 +9,7 @@ import javafx.event.{ActionEvent, EventHandler}
 import javafx.scene.Node
 import javafx.scene.layout.HBox
 import javafx.scene.text.Text
+import javafx.stage.Stage
 
 import scala.util.Random
 import scala.util.control.Breaks
@@ -18,7 +20,7 @@ object KakuroController {
   private var selectedCell: HBox = _
 
   // BUTTON HANDLING
-  def numberBtnHandler(text: String): EventHandler[ActionEvent] = {
+  def numberButtonHandler(text: String): EventHandler[ActionEvent] = {
     val handler = new EventHandler[ActionEvent] {
       def handle(e: ActionEvent): Unit = {
         changeSelectedCellText(text)
@@ -28,18 +30,18 @@ object KakuroController {
     handler
   }
 
-  def quitBtnHandlerEvent(): EventHandler[ActionEvent] = {
+  def quitButtonEventHandler(stage: Stage): EventHandler[ActionEvent] = {
     val handler = new EventHandler[ActionEvent] {
       def handle(e: ActionEvent): Unit = {
-        Platform.exit()
-        System.exit(0)
+        val introApp = new IntroApp
+        introApp.start(stage)
       }
     }
 
     handler
   }
 
-  def checkBtnHandlerEvent(): EventHandler[ActionEvent] = {
+  def checkButtonEventHandler(_stage: Stage): EventHandler[ActionEvent] = {
     val handler = new EventHandler[ActionEvent] {
       def handle(e: ActionEvent): Unit = {
         printf("Check will be available soon ;)\n")
@@ -49,10 +51,10 @@ object KakuroController {
     handler
   }
 
-  def newBoardBtnHandlerEvent(): EventHandler[ActionEvent] = {
+  def newBoardEventHandler(stage: Stage): EventHandler[ActionEvent] = {
     val handler = new EventHandler[ActionEvent] {
       def handle(e: ActionEvent): Unit = {
-        printf("Check will be available soon ;)\n")
+        printf("New board functionality will be available soon ;)\n")
       }
     }
 

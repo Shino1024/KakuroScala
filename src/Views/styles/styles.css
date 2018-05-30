@@ -1,16 +1,14 @@
-#Button{
-
+#Button {
     -fx-text-fill: white;
     -fx-font-size: 15;
     -fx-font-family: "Fira Code";
     -fx-font-weight: bold;
     -fx-pref-height: 100;
     -fx-pref-width: 200;
-    -fx-background-color: linear-gradient( #2f3441 , #212531 );
-    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
+    -fx-background-color: linear-gradient(#2f3441, #212531);
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);
     -fx-border-radius: 4px;
     -fx-border-color: antiquewhite;
-
 }
 
 #Button:hover {
@@ -21,8 +19,7 @@
     -fx-background-color: linear-gradient(#0f0f0f, #2f3441);
 }
 
-#ButtonContainer {
-
+#ElemContainer {
     -fx-padding: 10;
     -fx-alignment: center;
     -fx-pref-height: 400;
@@ -30,82 +27,58 @@
     -fx-background-color: black;
 }
 
-
 #IntroText {
-
     -fx-fill: darkred;
     -fx-font-size: 40;
     -fx-font-family: "Fira Code";
     -fx-font-weight: bold;
     -fx-aligment: center;
     -fx-background-color: black;
-
 }
 
-#InputCellText{
-
+#InputCellText {
     -fx-fill: black;
     -fx-font-size: 25;
     -fx-font-family: "Fira Code";
     -fx-font-weight: bold;
     -fx-aligment: center;
-
-
 }
 
-#InputCell{
-
+#InputCell {
     -fx-background-color: white;
     -fx-alignment: center;
     -fx-border-color:  black;
     -fx-border-width: 1;
     -fx-pref-height: 400;
-
 }
 
-#SelectedInputCell{
-
+#SelectedInputCell {
     -fx-background-color: antiquewhite;
     -fx-alignment: center;
     -fx-border-color:  black;
     -fx-border-width: 2;
     -fx-pref-height: 400;
-
-
 }
 
-
-#HintCell{
-
+#HintCell {
     -fx-alignment: center;
     -fx-background-color:
         linear-gradient(to right bottom, #4d5261 50%, #212531 50%);
     -fx-pref-height: 400;
-
-
 }
 
-
-#HintCellText{
-
+#HintCellText {
     -fx-fill: whitesmoke;
     -fx-font-size: 15;
     -fx-font-family: "Fira Code";
     -fx-font-weight: bold;
-
-
 }
 
-
-
-#EmptyCell{
-
+#EmptyCell {
     -fx-alignment: center;
     -fx-pref-height: 400;
     -fx-background-color: #0f0f0f;
     -fx-padding: 1;
-
-
 }
 
 #HighscoreTable {

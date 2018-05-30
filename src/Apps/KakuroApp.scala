@@ -13,15 +13,15 @@ class KakuroApp extends Application {
     val boardName = Settings.boardSize.toString.toLowerCase
     primaryStage.setTitle("Kakuro game: " + boardName + " board")
 
-    kakuroView.injectActionButtonHandler(BoardQuit, KakuroController.quitBtnHandlerEvent())
-    kakuroView.injectActionButtonHandler(Check, KakuroController.checkBtnHandlerEvent())
-    kakuroView.injectActionButtonHandler(NewBoard, KakuroController.newBoardBtnHandlerEvent())
+    kakuroView.injectActionButtonHandler(BoardQuit, KakuroController.quitButtonEventHandler(primaryStage))
+    kakuroView.injectActionButtonHandler(Check, KakuroController.checkButtonEventHandler(primaryStage))
+    kakuroView.injectActionButtonHandler(NewBoard, KakuroController.newBoardEventHandler(primaryStage))
 
-    kakuroView.injectKakuroBoard(KakuroController.generateCellBoard())
-
-    kakuroView.injectNumberButtonHandler(KakuroController.numberBtnHandler)
+    kakuroView.injectNumberButtonHandler(KakuroController.numberButtonHandler)
 
     kakuroView.injectKeyButtonHandler(KakuroController.selectedCellHandler)
+
+    kakuroView.injectKakuroBoard(KakuroController.generateCellBoard())
 
     val scene = kakuroView.generateScene
 

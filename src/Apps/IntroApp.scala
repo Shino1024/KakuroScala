@@ -11,9 +11,9 @@ class IntroApp extends Application {
   override def start(primaryStage: Stage) {
     primaryStage.setTitle("KAKURO MY DEAR!")
 
-    introView.injectActionButtonHandler(Play, IntroController.playBtnHandlerEvent(primaryStage))
-    introView.injectActionButtonHandler(Scores, IntroController.highscoreBtnHandlerEvent(primaryStage))
-    introView.injectActionButtonHandler(GameQuit, IntroController.quitBtnHandlerEvent(primaryStage))
+    introView.injectActionButtonHandler(Play, IntroController.playButtonEventHandler(primaryStage))
+    introView.injectActionButtonHandler(Scores, IntroController.highscoreButtonEventHandler(primaryStage))
+    introView.injectActionButtonHandler(GameQuit, IntroController.quitButtonEventHandler(primaryStage))
 
     val scene = introView.generateScene
 

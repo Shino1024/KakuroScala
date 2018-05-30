@@ -1,6 +1,6 @@
 package Views
 
-import ButtonGenerator.generateButton
+import ViewGenerator.generateButton
 import Models._
 import Util._
 import javafx.scene.control.TextField
@@ -13,7 +13,6 @@ import javafx.scene.input.MouseEvent
 import scala.collection.mutable
 
 class KakuroView extends GenericView {
-
   private val actionButtonHandlers = new mutable.HashMap[KakuroButton, EventHandler[ActionEvent]]()
   private var keyButtonHandler: HBox => EventHandler[MouseEvent] = _
   private var numberButtonHandler: String => EventHandler[ActionEvent] = _
@@ -37,49 +36,14 @@ class KakuroView extends GenericView {
 
   def generateActionButton(kakuroButton: KakuroButton): HBox = {
     actionButtonHandlers.get(kakuroButton) match {
-      case Some(handler) => ButtonGenerator.generateButton(kakuroButton.name, handler)
+      case Some(handler) => ViewGenerator.generateButton(kakuroButton.name, handler)
       case None => throw new NoSuchElementException("The " + kakuroButton.name.toLowerCase + " handler hasn't been installed.")
     }
   }
 
-//    kakuroButton match {
-//      case Quit =>
-//        buttonView.setText(kakuroButton.name)
-//        buttonView.setId("Button")
-//        buttonHandlers.get(Util.Quit) match {
-//          case Some(handler) => buttonView.setOnAction(handler)
-//          case None => throw new Exception("The quit handler hasn't been installed.")
-//        }
-//
-//      case Check =>
-//        buttonView.setText(kakuroButton.name)
-//        buttonView.setId("Button")
-//        buttonView.setOnAction(KakuroController.checkBtnHandlerEvent())
-//
-//      case NewBoard =>
-//        buttonView.setText(kakuroButton.name)
-//        buttonView.setId("Button")
-//        buttonView.setOnAction(KakuroController.newBoardBtnHandlerEvent())
-//    }
-
-//    ButtonGenerator.generateButton("ButtonContainer", kakuroButton.name, handler)
-
-//  private def generateKeyButton(i: Int) = {
-//    val button = new Button
-//    button.setText(i.toString)
-//    button.setId("Button")
-//    button.setOnAction(numberButtonHandler(button.getText))
-//
-//    val container = new HBox(button)
-//    container.setId("ButtonContainer")
-//    HBox.setHgrow(button, Priority.ALWAYS)
-//
-//    container
-//  }
-
   private def createEmptyContainer(): HBox = {
     val emptyContainer = new HBox
-    emptyContainer.setId("ButtonContainer")
+    emptyContainer.setId("ElemContainer")
 
     emptyContainer
   }
@@ -97,7 +61,7 @@ class KakuroView extends GenericView {
             case (0, value) if value != 0 =>
               text.setText (" \n    " + value.toString + " ")
 
-            case  (value, 0) if value != 0 =>
+            case (value, 0) if value != 0 =>
               text.setText (" " + value.toString + "\n ")
 
             case (value1, value2) =>
@@ -129,15 +93,14 @@ class KakuroView extends GenericView {
         HBox.setHgrow(textField, Priority.ALWAYS)
 
         container
-
     }
   }
 
   def fillScene(cellBoard: KakuroBoard, rowSize: Int, colSize: Int): GridPane  = {
     val root = new GridPane
 
-    for(i <- 0 until rowSize){
-      for( j <- 0 until colSize){
+    for (i <- 0 until rowSize){
+      for ( j <- 0 until colSize){
         root.add(createContainer(cellBoard.getMatrixCell(i,j)), j + 1 , i + 1)
       }
     }
@@ -147,16 +110,15 @@ class KakuroView extends GenericView {
       root.add(createEmptyContainer(), colSize + 1, i )
     }
 
-    for(i <- 0 to colSize + 1) {
+    for (i <- 0 to colSize + 1) {
       root.add(createEmptyContainer(), i, 0 )
       root.add(createEmptyContainer(), i, rowSize + 4 )
     }
 
-    for(i <- rowSize +1 to rowSize + 3) {
+    for (i <- rowSize +1 to rowSize + 3) {
       for (j <- 1 to colSize + 1) {
 
         (i, j) match {
-
           case (row , 2) if row == rowSize + 1 => root.add(generateButton(1.toString, numberButtonHandler(1.toString)), 2, row)
           case (row , 3) if row == rowSize + 1 => root.add(generateButton(2.toString, numberButtonHandler(2.toString)), 3, row)
           case (row , 4) if row == rowSize + 1 => root.add(generateButton(3.toString, numberButtonHandler(3.toString)), 4, row)
