@@ -12,7 +12,10 @@ object HighscoreDatabase {
   private var highscoreMap: m.HashMap[BoardSize, List[Highscore]] = new m.HashMap[BoardSize, List[Highscore]]()
 
   def fetchHighscores(boardSize: BoardSize): List[Highscore] = {
-    highscoreMap.get(boardSize)
+    highscoreMap.get(boardSize) match {
+      case Some(highscores) => highscores
+      case None => throw new NoSuchElementException("Scores for given board size weren't found.")
+    }
   }
 
   // TODO: Refactor this _somehow_.

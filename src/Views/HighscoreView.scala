@@ -1,7 +1,8 @@
 package Views
 
 import Models.BoardSize.BoardSize
-import Models.{BoardSize, Highscore, HighscoreDatabase, Settings}
+import Models.{BoardSize, Highscore, HighscoreDatabase}
+import Util.Settings
 import javafx.collections.FXCollections
 import javafx.scene.Scene
 import javafx.scene.control.{TableColumn, TableView}
@@ -19,8 +20,6 @@ class HighscoreView extends GenericView {
     "Date",
     "Time"
   )
-
-  HighscoreDatabase.parseHighscores()
 
   private def getHighscores(boardSize: BoardSize): List[Highscore] = {
     HighscoreDatabase.fetchHighscores(boardSize)
@@ -46,7 +45,7 @@ class HighscoreView extends GenericView {
   }
 
   def generateTables(): GridPane = {
-    var tablesPane = new GridPane()
+    val tablesPane = new GridPane()
     tablesPane.setHgap(20)
     val tableCaption = new Text("Highscores")
     tablesPane.add(tableCaption, 0, 1)
@@ -59,6 +58,8 @@ class HighscoreView extends GenericView {
 
   override def generateScene: Scene = {
     val root = generateTables()
-    new Scene(root, Settings.menuHeight, Settings.menuWidth)
+    val scene = new Scene(root, Settings.menuHeight, Settings.menuWidth)
+
+    scene
   }
 }
