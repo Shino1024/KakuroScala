@@ -62,7 +62,7 @@ class KakuroView extends GenericView {
               text.setText (" \n    " + value.toString + " ")
 
             case (value, 0) if value != 0 =>
-              text.setText (" " + value.toString + "\n ")
+              text.setText ("" + value.toString + "\n    ")
 
             case (value1, value2) =>
               text.setText (" " + value1.toString + "\n    " + value2.toString + " ")
@@ -73,7 +73,7 @@ class KakuroView extends GenericView {
 
         container
 
-      case _: KakuroInputCell =>
+      case kakuroCell: KakuroInputCell =>
         val text = new Text
         text.setText("")
         text.setId("InputCellText")
@@ -82,10 +82,10 @@ class KakuroView extends GenericView {
         container.setId("InputCell")
         HBox.setHgrow(text, Priority.ALWAYS)
         container.setOnMouseClicked(keyButtonHandler(container))
-
+        kakuroCell.setBox(container)
         container
 
-      case _: KakuroEmptyCell =>
+      case kakuroCell: KakuroEmptyCell =>
         val textField = new TextField()
 
         val container = new HBox(textField)
