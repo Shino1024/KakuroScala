@@ -15,3 +15,8 @@ case object MinorCaption extends CaptionType {
   def containerId: String = "MinorCaptionContainer"
 }
 
+case object TinyCaption extends CaptionType {
+  def id: String = "TinyCaption"
+  def containerId: String = "TinyCaptionContainer"
+}
+

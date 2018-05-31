@@ -1,8 +1,11 @@
 package Views
 
+import java.time.LocalTime
+
 import ViewGenerator.generateButton
 import Models._
 import Util._
+import ViewGenerator._
 import javafx.scene.control.TextField
 import javafx.scene.layout.{GridPane, HBox, Priority}
 import javafx.scene.text.Text
@@ -16,6 +19,9 @@ class KakuroView extends GenericView {
   private val actionButtonHandlers = new mutable.HashMap[KakuroButton, EventHandler[ActionEvent]]()
   private var keyButtonHandler: HBox => EventHandler[MouseEvent] = _
   private var numberButtonHandler: String => EventHandler[ActionEvent] = _
+
+  private var saveHighscoreButtonHandler: EventHandler[ActionEvent] = _
+
   private var kakuroBoard: KakuroBoard = _
 
   def injectActionButtonHandler(kakuroButton: KakuroButton, buttonEventHandler: EventHandler[ActionEvent]): Unit = {
@@ -28,6 +34,24 @@ class KakuroView extends GenericView {
 
   def injectNumberButtonHandler(buttonEventHandler: String => EventHandler[ActionEvent]): Unit = {
     numberButtonHandler = buttonEventHandler
+  }
+
+  def injectSaveHighscoreButtonHandler(buttonEventHandler: EventHandler[ActionEvent]): Unit = {
+    saveHighscoreButtonHandler = buttonEventHandler
+  }
+
+  def setFinishTime(time: LocalTime): Unit = {
+    finish
+  }
+
+  def disableInput(): Unit = {
+    numberButtonHandler = { _: String =>
+      null
+    }
+
+    keyButtonHandler = { _: HBox =>
+      null
+    }
   }
 
   def injectKakuroBoard(_kakuroBoard: KakuroBoard): Unit = {
@@ -140,6 +164,28 @@ class KakuroView extends GenericView {
     }
 
     root
+  }
+
+  def generateWinBox(time: LocalTime): GridPane = {
+    val winPane = new GridPane()
+    winPane.setId("WinPane")
+
+    val winCaption = generateCaption("Congratulations!", MinorCaption)
+    val timeCaption = generateCaption("Your time: ", TinyCaption)
+    val timeValue = generateCaption(time.toString, TinyCaption)
+
+    val nick = new TextField
+    nick.setPromptText("Your nick")
+
+    val submitButton = generateButton("Submit", saveHighscoreButtonHandler)
+
+    winPane.add(winCaption, 0, 0, 2, 1)
+    winPane.add(timeCaption, 0, 1)
+    winPane.add(timeValue, 1, 1)
+    winPane.add(nick, 0, 2)
+    winPane.add(submitButton, 1, 2)
+
+    winPane
   }
 
   override def generateScene: Scene = {

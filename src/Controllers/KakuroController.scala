@@ -1,22 +1,58 @@
 package Controllers
 
+import java.time.{LocalDateTime, LocalTime}
+import java.time.temporal.ChronoUnit
+
 import Apps.IntroApp
 import Models._
 import Util.Settings
+import Views.{BoardQuit, Check, KakuroView, NewBoard}
 import javafx.scene.input.MouseEvent
 import javafx.event.{ActionEvent, EventHandler}
 import javafx.scene.Node
-import javafx.scene.layout.HBox
+import javafx.scene.layout.{HBox, StackPane}
 import javafx.scene.text.Text
 import javafx.stage.Stage
 
 import scala.util.Random
 import scala.util.control.Breaks
 
-object KakuroController {
+class KakuroController extends GenericController {
+  private val kakuroView = new KakuroView
+  private var primaryStage: Stage = _
+
   private val kakuroBoard: KakuroBoard = new KakuroBoard(Settings.boardSize)
 
   private var selectedCell: HBox = _
+
+  private var startTime: LocalDateTime = _
+  private var endTime: LocalDateTime = _
+
+  kakuroView.injectActionButtonHandler(BoardQuit, quitButtonEventHandler(primaryStage))
+  kakuroView.injectActionButtonHandler(Check, checkButtonEventHandler(primaryStage))
+  kakuroView.injectActionButtonHandler(NewBoard, newBoardEventHandler(primaryStage))
+
+  kakuroView.injectNumberButtonHandler(numberButtonHandler)
+
+  kakuroView.injectKeyButtonHandler(selectedCellHandler)
+
+  kakuroView.injectSaveHighscoreButtonHandler(saveHighscoreButtonHandler())
+
+  kakuroView.injectKakuroBoard(generateCellBoard())
+
+  override def setStage(stage: Stage): Unit = {
+    primaryStage = stage
+  }
+
+  override def showStage(): Unit = {
+    val scene = kakuroView.generateScene
+    val boardName = Settings.boardSize.toString.toLowerCase
+    primaryStage.setTitle("Kakuro game: " + boardName + " board")
+
+    scene.getStylesheets.add("Views/styles/styles.css")
+    primaryStage.setScene(scene)
+    primaryStage.show()
+  }
 
   // BUTTON HANDLING
   def numberButtonHandler(text: String): EventHandler[ActionEvent] = {
@@ -53,11 +89,38 @@ object KakuroController {
   def newBoardEventHandler(stage: Stage): EventHandler[ActionEvent] = {
     val handler = new EventHandler[ActionEvent] {
       def handle(e: ActionEvent): Unit = {
-        printf("New board functionality will be available soon ;)\n")
+        startTimer
       }
     }
 
     handler
+  }
+
+  def saveHighscoreButtonHandler(stackPane: StackPane): EventHandler[ActionEvent] = {
+    val handler = new EventHandler[ActionEvent] {
+      def handle(e: ActionEvent): Unit = {
+        //
+        stackPane.getChildren.remove(stackPane.getChildren.size() - 1)
+      }
+    }
+
+    handler
+  }
+
+  def startTimer: Unit = {
+    startTime = LocalDateTime.now()
+  }
+
+  def endTimer: Unit = {
+    endTime = LocalDateTime.now()
+  }
+
+  def getTime: LocalTime = {
+    val hoursDifference: Int = ChronoUnit.HOURS.between(endTime, startTime).asInstanceOf[Int]
+    val minutesDifference: Int = (ChronoUnit.MINUTES.between(endTime, startTime) % 60).asInstanceOf[Int]
+    val secondsDifference: Int = (ChronoUnit.SECONDS.between(endTime, startTime) % 60).asInstanceOf[Int]
+
+    LocalTime.of(hoursDifference, minutesDifference, secondsDifference)
   }
 
   //CELL HANDLING
