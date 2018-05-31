@@ -38,6 +38,9 @@ class SumBoard() {
       var requiredSum:Int = 0
       var inputCellsSum:Int = 0
 
+      val numbersArr = new Array[Boolean](10)
+      for(i <- 1 to 9 ) numbersArr(i) = false
+
       for(element <- list){
 
         element match {
@@ -52,8 +55,14 @@ class SumBoard() {
             node match {
               case textNode: Text =>
                 if (textNode.getText != ""){
-                  println(textNode.getText)
+
                   currentValue = textNode.getText.toInt
+
+                  if(numbersArr(currentValue) == true) {
+                    return false
+                  }else{
+                    numbersArr(currentValue) = true
+                  }
                 }else {
                   return false
                 }
