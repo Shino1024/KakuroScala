@@ -55,7 +55,7 @@ class SumBoard() {
                   println(textNode.getText)
                   currentValue = textNode.getText.toInt
                 }else {
-                  currentValue = 0
+                  return false
                 }
             }
            inputCellsSum = inputCellsSum + currentValue
