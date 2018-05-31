@@ -3,7 +3,6 @@ package Controllers
 import Apps.IntroApp
 import Models._
 import Util.Settings
-import javafx.application.Platform
 import javafx.scene.input.MouseEvent
 import javafx.event.{ActionEvent, EventHandler}
 import javafx.scene.Node

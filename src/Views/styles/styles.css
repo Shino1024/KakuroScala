@@ -3,8 +3,8 @@
     -fx-font-size: 15;
     -fx-font-family: "Fira Code";
     -fx-font-weight: bold;
-    -fx-pref-height: 100;
-    -fx-pref-width: 200;
+    -fx-pref-height: 50;
+    -fx-pref-width: 150;
     -fx-background-color: linear-gradient(#2f3441, #212531);
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);
     -fx-border-radius: 4px;
@@ -19,21 +19,38 @@
     -fx-background-color: linear-gradient(#0f0f0f, #2f3441);
 }
 
-#ElemContainer {
+#ButtonContainer {
     -fx-padding: 10;
     -fx-alignment: center;
-    -fx-pref-height: 400;
-    -fx-pref-width: 4000;
-    -fx-background-color: black;
+    -fx-pref-height: 50;
+    -fx-pref-width: 150;
 }
 
-#IntroText {
+#TitleCaption {
     -fx-fill: darkred;
     -fx-font-size: 40;
     -fx-font-family: "Fira Code";
     -fx-font-weight: bold;
     -fx-aligment: center;
+}
+
+#TitleCaptionContainer {
+    -fx-padding: 5;
+    -fx-alignment: center;
+}
+
+#MinorCaption {
+    -fx-fill: darkgreen;
+    -fx-font-size: 20;
+    -fx-font-family: "Fira Code";
+    -fx-font-weight: bold;
+    -fx-aligment: center;
     -fx-background-color: black;
+}
+
+#MinorCaptionContainer {
+    -fx-padding: 5;
+    -fx-alignment: center;
 }
 
 #InputCellText {
@@ -82,9 +99,11 @@
 }
 
 #HighscoreTable {
-
+    -fx-pref-width: 400;
+    -fx-pref-height: 145;
 }
 
-#Caption {
-
+#App {
+    -fx-padding: 10;
+    -fx-background-color: linear-gradient(#0f1421, #010511);
 }

@@ -1,5 +1,6 @@
 package Apps
 
+import Controllers.HighscoreController
 import Models.{BoardSize, HighscoreDatabase}
 import Views.HighscoreView
 import javafx.application.Application
@@ -10,11 +11,11 @@ class HighscoreApp extends Application {
 
   override def start(primaryStage: Stage): Unit = {
     primaryStage.setTitle("Kakuro highscores")
+    primaryStage.setResizable(false)
 
-    HighscoreDatabase.saveHighscores()
     HighscoreDatabase.parseHighscores()
-    val hd = HighscoreDatabase.fetchHighscores(BoardSize.SMALL)
-    println(hd)
+
+    highscoreView.injectBackButtonHandler(HighscoreController.backButtonEventHandler(primaryStage))
 
     val scene = highscoreView.generateScene
 

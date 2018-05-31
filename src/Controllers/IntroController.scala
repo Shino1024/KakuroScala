@@ -1,7 +1,6 @@
 package Controllers
 
 import Apps.{HighscoreApp, KakuroApp}
-import javafx.application.Platform
 import javafx.event.{ActionEvent, EventHandler}
 import javafx.stage.Stage
 
@@ -31,8 +30,7 @@ object IntroController {
   def quitButtonEventHandler(stage: Stage): EventHandler[ActionEvent] = {
     val handler = new EventHandler[ActionEvent] {
       def handle(e: ActionEvent): Unit = {
-        Platform.exit()
-        System.exit(0)
+        Util.UtilFunctions.exitGame
       }
     }
 

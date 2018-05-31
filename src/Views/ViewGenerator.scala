@@ -14,18 +14,18 @@ object ViewGenerator {
     buttonView.setOnAction(eventHandler)
 
     val container = new HBox(buttonView)
-    container.setId("ElemContainer")
+    container.setId("ButtonContainer")
     HBox.setHgrow(buttonView, Priority.ALWAYS)
 
     container
   }
 
-  def generateCaption(text: String): HBox = {
+  def generateCaption(text: String, captionType: CaptionType): HBox = {
     val textView = new Text(text)
-    textView.setId("IntroText")
+    textView.setId(captionType.id)
 
     val container = new HBox(textView)
-    container.setId("ElemContainer")
+    container.setId(captionType.containerId)
 
     container
   }

@@ -6,8 +6,10 @@ import Models.BoardSize.BoardSize
 object Settings {
   var boardSize: BoardSize = BoardSize.SMALL
 
-  val menuHeight = 480
-  val menuWidth = 480
+  val databaseSize = 5
+
+  val menuHeight = 540
+  val menuWidth = 360
 
   val highscoreFilename = "highscores.txt"
 }

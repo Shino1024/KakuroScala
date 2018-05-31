@@ -10,6 +10,7 @@ class IntroApp extends Application {
 
   override def start(primaryStage: Stage) {
     primaryStage.setTitle("KAKURO MY DEAR!")
+    primaryStage.setResizable(false)
 
     introView.injectActionButtonHandler(Play, IntroController.playButtonEventHandler(primaryStage))
     introView.injectActionButtonHandler(Scores, IntroController.highscoreButtonEventHandler(primaryStage))

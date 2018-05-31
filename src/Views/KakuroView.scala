@@ -43,7 +43,7 @@ class KakuroView extends GenericView {
 
   private def createEmptyContainer(): HBox = {
     val emptyContainer = new HBox
-    emptyContainer.setId("ElemContainer")
+    emptyContainer.setId("ButtonContainer")
 
     emptyContainer
   }
@@ -144,6 +144,7 @@ class KakuroView extends GenericView {
 
   override def generateScene: Scene = {
     val root = fillScene(kakuroBoard, Settings.boardSize.id, Settings.boardSize.id)
+    root.setId("App")
     val scene = new Scene(root, 700, 700)
 
     scene
