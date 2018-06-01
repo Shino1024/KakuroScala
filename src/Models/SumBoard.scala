@@ -7,13 +7,11 @@ import javafx.scene.text.Text
 
 class SumBoard() {
 
-  private var matrix: List[List[KakuroCell]] = List()
+  private var matrix: List[AuxiliarySumCell] = List()
   private var currentList: List[KakuroCell] = List()
 
 
-  def addList(): Unit = {
-    matrix  = matrix :+ currentList
-  }
+
 
   def createNewList():Unit = {
     currentList = List()
@@ -23,9 +21,11 @@ class SumBoard() {
     currentList = currentList :+ cell
   }
 
-  def addMatrixSumCell(cell: KakuroCell): Unit = {
+  def addMatrixSumList(value: Int): Unit = {
 
-    currentList = cell :: currentList
+    var sumCell: AuxiliarySumCell = new AuxiliarySumCell(value, currentList)
+
+    matrix = matrix :+ sumCell
 
   }
 
@@ -34,19 +34,17 @@ class SumBoard() {
 
   def checkBoard(): Boolean = {
 
-    for(list <- matrix){
+    for(sumCell: AuxiliarySumCell <- matrix){
 
-      var requiredSum:Int = 0
+      val requiredSum:Int = sumCell.getValue()
       var inputCellsSum:Int = 0
 
       val numbersArr = new Array[Boolean](10)
       for(i <- 1 to 9 ) numbersArr(i) = false
 
-      for(element <- list){
+      for(element <- sumCell.getInputCellList()){
 
         element match {
-          case cell:KakuroSumCell =>
-            requiredSum = cell.getSum
 
           case cell:KakuroInputCell =>
 
@@ -76,9 +74,9 @@ class SumBoard() {
 
       if (requiredSum != inputCellsSum) return false
 
-
       print(requiredSum + " " + inputCellsSum + "\n")
     }
+
       true
   }
 
@@ -87,28 +85,23 @@ class SumBoard() {
   // WILL BE DELETED IN FINAL FORM OF THIS APP
   def showBoard():Unit = {
 
-    for(list <- matrix){
 
-      for(element <- list){
+    for (sumCell: AuxiliarySumCell <- matrix) {
 
-         element match {
+      print(sumCell.getValue() + " ")
 
-           case cell:KakuroSumCell =>
-             print(cell.getSum + " ")
+      for (element <- sumCell.getInputCellList()) {
 
-           case cell:KakuroInputCell =>
-             print(cell.getRow + " " + cell.getColumn + ", ")
+        element match {
+          case element: KakuroInputCell =>
+            print(element.getRow + " " + element.getColumn + ", ")
 
-           case _ => print("null ")
-         }
-
+        }
       }
       print("\n")
-
     }
+
   }
-
-
 
 
 }

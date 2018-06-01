@@ -312,7 +312,7 @@ class KakuroController extends GenericController {
       for (j <- 0 until Settings.boardSize.id) {
         logicBoard(i)(j) match {
           case 0 =>
-            val kakuroCell = new KakuroHintCell(0, 0)
+            val kakuroCell = new KakuroSumCell(0, 0)
 
             var markedFlag = true
 
@@ -336,8 +336,7 @@ class KakuroController extends GenericController {
 
               val sumValue = Random.nextInt(34) + 1
               kakuroCell.setHValue(sumValue)
-              sumBoard.addMatrixSumCell(new KakuroSumCell(sumValue))
-              sumBoard.addList()
+              sumBoard.addMatrixSumList(sumValue)
 
 
             }
@@ -364,8 +363,7 @@ class KakuroController extends GenericController {
 
               val sumValue = Random.nextInt(34) + 1
               kakuroCell.setVValue(sumValue)
-              sumBoard.addMatrixSumCell(new KakuroSumCell(sumValue))
-              sumBoard.addList()
+              sumBoard.addMatrixSumList( sumValue)
             }
 
             //RIGHT DIRECTION
@@ -389,8 +387,7 @@ class KakuroController extends GenericController {
 
               val sumValue = Random.nextInt(34) + 1
               kakuroCell.setHValue(sumValue)
-              sumBoard.addMatrixSumCell(new KakuroSumCell(sumValue))
-              sumBoard.addList()
+              sumBoard.addMatrixSumList(sumValue)
             }
 
             //LEFT DIRECTION
@@ -414,8 +411,7 @@ class KakuroController extends GenericController {
 
               val sumValue = Random.nextInt(34) + 1
               kakuroCell.setVValue(sumValue)
-              sumBoard.addMatrixSumCell(new KakuroSumCell(sumValue))
-              sumBoard.addList()
+              sumBoard.addMatrixSumList(sumValue)
             }
 
             //WHEN BLACK CELL DON'T NEED TO HAVE NUMBER, BUT WE HAVE TO MARKED IT AS COVERED
