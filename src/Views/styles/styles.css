@@ -142,6 +142,33 @@
     -fx-pref-height: 145;
 }
 
+#SizeChooser {
+    -fx-alignment: center;
+}
+
+.radio-button {
+    -fx-padding: 4;
+    -fx-font-size: 16;
+    -fx-text-fill: #BBBBBB;
+}
+
+.radio-button .radio {
+    -fx-background-color: #818591;
+}
+
+.radio-button .radio:selected {
+    -fx-background-color: #414551;
+}
+
+.radio-button .radio:armed {
+    -fx-background-color: #212541;
+}
+
+.radio-button .dot {
+    -fx-background-radius: 15;
+    -fx-padding: 8;
+}
+
 #WinPane {
     -fx-padding: 10;
     -fx-max-width: 300;

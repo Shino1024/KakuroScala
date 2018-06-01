@@ -16,7 +16,6 @@ import javafx.scene.text.Text
 import javafx.stage.Stage
 
 import scala.util.Random
-import scala.util.control.Breaks
 
 class KakuroController extends GenericController {
   private val kakuroView = new KakuroView
@@ -62,7 +61,7 @@ class KakuroController extends GenericController {
     handler
   }
 
-  def quitButtonEventHandler(stage: Stage): EventHandler[ActionEvent] = {
+  def backButtonHandler(stage: Stage): EventHandler[ActionEvent] = {
     val handler = new EventHandler[ActionEvent] {
       def handle(e: ActionEvent): Unit = {
         val introApp = new IntroApp
@@ -76,14 +75,11 @@ class KakuroController extends GenericController {
   def checkButtonEventHandler(_stage: Stage): EventHandler[ActionEvent] = {
     val handler = new EventHandler[ActionEvent] {
       def handle(e: ActionEvent): Unit = {
+        kakuroView.disableInput()
+        kakuroView.setFinishTime(getTime)
+        kakuroView.displayWinBox()
 
-        if(sumBoard.checkBoard()) {
-          kakuroView.disableInput()
-          kakuroView.setFinishTime(getTime)
-          kakuroView.displayWinBox()
-        }else{
-          print("false")
-        }
+        println("Check board", sumBoard.checkBoard())
 
       }
     }
@@ -104,7 +100,7 @@ class KakuroController extends GenericController {
   }
 
   def installBaseHandlers(): Unit = {
-    kakuroView.injectActionButtonHandler(BoardQuit, quitButtonEventHandler(primaryStage))
+    kakuroView.injectActionButtonHandler(BoardQuit, backButtonHandler(primaryStage))
     kakuroView.injectActionButtonHandler(Check, checkButtonEventHandler(primaryStage))
     kakuroView.injectActionButtonHandler(NewBoard, newBoardEventHandler(primaryStage))
 
@@ -148,9 +144,6 @@ class KakuroController extends GenericController {
 
     LocalTime.of(hoursDifference, minutesDifference, secondsDifference)
   }
-
-
-
 
   //CELL HANDLING
   def selectedCellHandler(cell: HBox): EventHandler[MouseEvent] = {

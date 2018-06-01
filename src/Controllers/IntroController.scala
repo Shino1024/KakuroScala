@@ -55,7 +55,7 @@ class IntroController extends GenericController {
   def quitButtonEventHandler(stage: Stage): EventHandler[ActionEvent] = {
     val handler = new EventHandler[ActionEvent] {
       def handle(e: ActionEvent): Unit = {
-        UtilFunctions.exitGame
+        UtilFunctions.exitGame()
       }
     }
 

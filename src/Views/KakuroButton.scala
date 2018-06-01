@@ -10,5 +10,5 @@ case object Check extends KakuroButton {
   def name: String = "CHECK"
 }
 case object BoardQuit extends KakuroButton {
-  def name: String = "QUIT"
+  def name: String = "BACK"
 }

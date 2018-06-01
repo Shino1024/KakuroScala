@@ -21,6 +21,7 @@ class KakuroView extends GenericView {
   private var numberButtonHandler: String => EventHandler[ActionEvent] = _
 
   private var saveHighscoreButtonHandler: (TextField, StackPane) => EventHandler[ActionEvent] = _
+  private var backButtonHandler: EventHandler[ActionEvent] = _
 
   private var kakuroBoard: KakuroBoard = _
 
@@ -46,6 +47,10 @@ class KakuroView extends GenericView {
 
   def injectSaveHighscoreButtonHandler(buttonEventHandler: (TextField, StackPane) => EventHandler[ActionEvent]): Unit = {
     saveHighscoreButtonHandler = buttonEventHandler
+  }
+
+  def injectBackButtonHandler(buttonEventHandler: EventHandler[ActionEvent]): Unit = {
+    backButtonHandler = buttonEventHandler
   }
 
   def setFinishTime(time: LocalTime): Unit = {
@@ -185,9 +190,9 @@ class KakuroView extends GenericView {
       root.add(separator, 3, i)
     }
 
-    root.add(generateActionButton(Check), 9, 0, 2, 1)
-    root.add(generateActionButton(NewBoard), 9, 1, 2, 1)
-    root.add(generateActionButton(BoardQuit), 9, 2, 2, 1)
+    root.add(generateActionButton(Check), 9, 0, 1, 1)
+    root.add(generateActionButton(NewBoard), 9, 1, 1, 1)
+    root.add(generateActionButton(BoardQuit), 9, 2, 1, 1)
 
     root
   }
