@@ -7,13 +7,15 @@ import Apps.IntroApp
 import Models._
 import Util.Settings
 import Views.{BoardQuit, Check, KakuroView, NewBoard}
+import javafx.animation.{Animation, KeyFrame, Timeline}
 import javafx.scene.input.MouseEvent
 import javafx.event.{ActionEvent, EventHandler}
 import javafx.scene.Node
 import javafx.scene.control.TextField
-import javafx.scene.layout.{HBox, StackPane}
+import javafx.scene.layout.HBox
 import javafx.scene.text.Text
 import javafx.stage.Stage
+import javafx.util.Duration
 
 import scala.util.Random
 
@@ -28,7 +30,8 @@ class KakuroController extends GenericController {
   private var selectedCell: HBox = _
 
   private var startTime: LocalDateTime = LocalDateTime.now()
-  private var endTime: LocalDateTime = _
+
+  private var timeline: Timeline = _
 
   override def setStage(stage: Stage): Unit = {
     primaryStage = stage
@@ -45,6 +48,8 @@ class KakuroController extends GenericController {
     val scene = kakuroView.generateScene
     val boardName = Settings.boardSize.toString.toLowerCase
     primaryStage.setTitle("Kakuro game: " + boardName + " board")
+
+    runClock()
 
     scene.getStylesheets.add("Views/styles/styles.css")
     primaryStage.setScene(scene)
@@ -73,15 +78,22 @@ class KakuroController extends GenericController {
     handler
   }
 
+  def winProcedure(): Unit = {
+    kakuroView.disableInput()
+    kakuroView.setFinishTime(getTime)
+    kakuroView.displayWinBox()
+    timeline.stop()
+  }
+
+  def wrongCheckProcedure(): Unit = {
+    kakuroView.disableInput()
+    kakuroView.displayCheckWrongBox()
+  }
+
   def checkButtonEventHandler(_stage: Stage): EventHandler[ActionEvent] = {
     val handler = new EventHandler[ActionEvent] {
       def handle(e: ActionEvent): Unit = {
-        kakuroView.disableInput()
-//        kakuroView.setFinishTime(getTime)
-//        kakuroView.displayWinBox()
-        kakuroView.displayCheckWrongBox()
-
-        println("Check board", sumBoard.checkBoard())
+        winProcedure
       }
     }
 
@@ -92,12 +104,23 @@ class KakuroController extends GenericController {
     val handler = new EventHandler[ActionEvent] {
       def handle(e: ActionEvent): Unit = {
         startTimer()
+        runClock()
         kakuroView.injectKakuroBoard(generateCellBoard())
         kakuroView.updateKakuroBoardView()
       }
     }
 
     handler
+  }
+
+  def runClock(): Unit = {
+    timeline = new Timeline(new KeyFrame(Duration.seconds(1), new EventHandler[ActionEvent] {
+      override def handle(event: ActionEvent): Unit = {
+        kakuroView.updateTimerView(getTime)
+      }
+    }))
+    timeline.setCycleCount(Animation.INDEFINITE)
+    timeline.play()
   }
 
   def installBaseHandlers(): Unit = {
@@ -120,6 +143,8 @@ class KakuroController extends GenericController {
         kakuroView.enableInput()
 
         startTimer()
+        runClock()
+
         kakuroView.injectKakuroBoard(generateCellBoard())
         kakuroView.updateKakuroBoardView()
       }
@@ -143,12 +168,8 @@ class KakuroController extends GenericController {
     startTime = LocalDateTime.now()
   }
 
-  private def endTimer(): Unit = {
-    endTime = LocalDateTime.now()
-  }
-
   def getTime: LocalTime = {
-    endTimer()
+    val endTime = LocalDateTime.now()
 
     val hoursDifference: Int = ChronoUnit.HOURS.between(startTime, endTime).asInstanceOf[Int]
     val minutesDifference: Int = (ChronoUnit.MINUTES.between(startTime, endTime) % 60).asInstanceOf[Int]

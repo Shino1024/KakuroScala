@@ -29,7 +29,11 @@ class KakuroView extends GenericView {
 
   private var inputDisabled = false
 
+  private var timerView: HBox = _
+
   private val root: StackPane = new StackPane
+
+  private val rowSpan = Settings.boardSize.id + 5
 
   private def dummyHandler[T <: javafx.event.Event]() = new EventHandler[T] {
     override def handle(event: T): Unit = {}
@@ -155,8 +159,9 @@ class KakuroView extends GenericView {
 
   def updateKakuroBoardView(): Unit = {
     val newBoardView = new GridPane
-    newBoardView.add(makeKakuroBoard(), 0, 0, Settings.boardSize.id + 5,1)
-    newBoardView.add(makeControlPanel(), 0, 1, Settings.boardSize.id + 5, 1)
+    newBoardView.add(timerView, 0, 0, rowSpan, 1)
+    newBoardView.add(makeKakuroBoard(), 0, 1, rowSpan,1)
+    newBoardView.add(makeControlPanel(), 0, 2, rowSpan, 1)
     root.getChildren.set(0, newBoardView)
   }
 
@@ -251,14 +256,22 @@ class KakuroView extends GenericView {
     root.getChildren.remove(root.getChildren.size - 1)
   }
 
+  def updateTimerView(time: LocalTime): Unit = {
+    timerView.getChildren.get(0).asInstanceOf[Text].setText("Time: " + time.toString)
+    println(time.toString)
+  }
+
   override def generateScene: Scene = {
     val gameScene = new GridPane
     val kakuroBoardView = makeKakuroBoard()
     val controlPanelView = makeControlPanel()
     controlPanelView.setId("KakuroControlPanel")
 
-    gameScene.add(kakuroBoardView, 0, 0, Settings.boardSize.id + 5,1)
-    gameScene.add(controlPanelView, 0, 1, Settings.boardSize.id + 5, 1)
+    timerView = generateCaption("", MinorCaption)
+
+    gameScene.add(timerView, 0, 0, rowSpan, 1)
+    gameScene.add(kakuroBoardView, 0, 1, rowSpan,1)
+    gameScene.add(controlPanelView, 0, 2, rowSpan, 1)
     root.getChildren.add(gameScene)
     println("Centered????\n\n\n")
 
