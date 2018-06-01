@@ -89,7 +89,10 @@
     -fx-alignment: center;
     -fx-border-color:  black;
     -fx-border-width: 1;
-    -fx-pref-height: 400;
+    -fx-min-height: 40;
+    -fx-min-width: 40;
+    -fx-max-height: 40;
+    -fx-max-width: 40;
 }
 
 #SelectedInputCell {
@@ -112,8 +115,11 @@
 #HintCell {
     -fx-alignment: center;
     -fx-background-color:
-        linear-gradient(to right bottom, #4d5261 50%, #212531 50%);
-    -fx-pref-height: 400;
+        linear-gradient(to left bottom, #4d5261 50%, #212531 50%);
+    -fx-min-height: 40;
+    -fx-min-width: 40;
+    -fx-max-height: 40;
+    -fx-max-width: 40;
 }
 
 #HintCellText {
@@ -126,9 +132,14 @@
 #EmptyCell {
     -fx-alignment: center;
     -fx-padding: 10;
-    -fx-pref-height: 50;
-    -fx-pref-width: 150;
+    /*-fx-min-height: 40;*/
+    /*-fx-min-width: 40;*/
+    /*-fx-max-height: 40;*/
+    /*-fx-max-width: 40;*/
+}
 
+#Center {
+    -fx-alignment: center;
 }
 
 #HighscoreTable {

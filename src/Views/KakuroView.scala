@@ -85,7 +85,6 @@ class KakuroView extends GenericView {
   }
 
   def createInfoContainer(info: String): HBox = {
-
     val text: Text = new Text
     text.setText(info)
     text.setId("InfoText")
@@ -95,10 +94,8 @@ class KakuroView extends GenericView {
     container.setId("EmptyCell")
 
     container
-
-
-
   }
+
   def createContainer(kakuroCell: KakuroCell): HBox = {
     kakuroCell match {
       case kakuroCell: KakuroHintCell =>
@@ -110,13 +107,13 @@ class KakuroView extends GenericView {
               text.setText("")
 
             case (0, value) if value != 0 =>
-              text.setText (" \n    " + value.toString + " ")
+              text.setText("    " + value.toString + "\n")
 
             case (value, 0) if value != 0 =>
-              text.setText ("" + value.toString + "\n    ")
+              text.setText("\n" + value.toString)
 
             case (value1, value2) =>
-              text.setText (" " + value1.toString + "\n    " + value2.toString + " ")
+              text.setText("    " + value1.toString + "\n " + value2.toString)
         }
 
         val container = new HBox(text)
@@ -148,15 +145,19 @@ class KakuroView extends GenericView {
   }
 
   def updateKakuroBoardView(): Unit = {
-    root.getChildren.set(0, makeKakuroBoard())
+    val newBoardView = new GridPane
+    newBoardView.add(makeKakuroBoard(), 0, 0)
+    newBoardView.add(makeControlPanel(), 0, 1)
+    root.getChildren.set(0, newBoardView)
   }
 
   def makeKakuroBoard(): GridPane = {
     val root = new GridPane
+    root.setId("Center")
 
     for (i <- 0 until kakuroBoard.size.id) {
       for (j <- 0 until kakuroBoard.size.id) {
-        root.add(createContainer(kakuroBoard.getMatrixCell(i,j)), j + 1 , i + 1)
+        root.add(createContainer(kakuroBoard.getMatrixCell(i,j)), j, i)
       }
     }
 
@@ -169,91 +170,27 @@ class KakuroView extends GenericView {
     val rowSize = kakuroBoard.size.id
     val colSize = kakuroBoard.size.id
 
-
-
-
-
-    for (i <- 0 to colSize + 1) {
-      root.add(createEmptyContainer(), i, 0 )
-      root.add(createEmptyContainer(), i, rowSize + 4 )
+    for (i <- 0 to 2) {
+      for (j <- 0 to 2) {
+        val strNum = (i * 3 + j + 1).toString
+        val button = generateButton(strNum, numberButtonHandler(strNum))
+        button.setMaxWidth(20f)
+        root.add(button, j, i)
+      }
     }
 
-
-
-    for (i <- 1 to 3) {
-      for (j <- 0 to colSize + 1) {
-
-        (i, j) match {
-          case (row , 1) if row == 1 => root.add(generateButton(1.toString, numberButtonHandler(1.toString)), 1, row)
-          case (row , 2) if row == 1 => root.add(generateButton(2.toString, numberButtonHandler(2.toString)), 2, row)
-          case (row , 3) if row == 1 => root.add(generateButton(3.toString, numberButtonHandler(3.toString)), 3, row)
-          case (row , 1) if row == 2 => root.add(generateButton(4.toString, numberButtonHandler(4.toString)), 1, row)
-          case (row , 2) if row == 2 => root.add(generateButton(5.toString, numberButtonHandler(5.toString)), 2, row)
-          case (row , 3) if row == 2 => root.add(generateButton(6.toString, numberButtonHandler(6.toString)), 3, row)
-          case (row , 1) if row == 3 => root.add(generateButton(7.toString, numberButtonHandler(7.toString)), 1, row)
-          case (row , 2) if row == 3 => root.add(generateButton(8.toString, numberButtonHandler(8.toString)), 2, row)
-          case (row , 3) if row == 3 => root.add(generateButton(9.toString, numberButtonHandler(9.toString)), 3, row)
-
-          case (row, col) if row == 1 && col == 7 => root.add(generateActionButton(Check), col, row, 2, 1)
-          case (row, col) if row == 2 && col == 7 => root.add(generateActionButton(NewBoard), col, row, 2 ,1)
-          case (row, col) if row == 3 && col == 7 => root.add(generateActionButton(BoardQuit), col, row, 2 ,1)
-          case (row, col) if row == 1 && col == 4 => root.add(createInfoContainer("WRONG ANSWER :("), col, row, 3 ,1)
-
-          case (row, col) if (row == 2 && col == 8) || (row == 3 && col == 8) || (row == 1 && col == 8) ||
-                             (row == 1 && col == 5) || (row == 1 && col == 6)  =>
-          case( _, _) => root.add(createEmptyContainer(), j, i )
-        }}
-
+    for (i <- 0 to 2) {
+      val separator = createEmptyContainer()
+      separator.setMinWidth(5f * Settings.boardSize.id)
+      root.add(separator, 3, i)
     }
+
+    root.add(generateActionButton(Check), 9, 0, 2, 1)
+    root.add(generateActionButton(NewBoard), 9, 1, 2, 1)
+    root.add(generateActionButton(BoardQuit), 9, 2, 2, 1)
 
     root
   }
-
-//  def fillScene(cellBoard: KakuroBoard, rowSize: Int, colSize: Int): GridPane  = {
-//    val root = new GridPane
-//
-//    for (i <- 0 until rowSize){
-//      for ( j <- 0 until colSize){
-//        root.add(createContainer(cellBoard.getMatrixCell(i,j)), j + 1 , i + 1)
-//      }
-//    }
-//
-//    for (i <- 0 to rowSize + 4) {
-//      root.add(createEmptyContainer(), 0, i )
-//      root.add(createEmptyContainer(), colSize + 1, i )
-//    }
-//
-//    for (i <- 0 to colSize + 1) {
-//      root.add(createEmptyContainer(), i, 0 )
-//      root.add(createEmptyContainer(), i, rowSize + 4 )
-//    }
-//
-//    for (i <- rowSize +1 to rowSize + 3) {
-//      for (j <- 1 to colSize + 1) {
-//
-//        (i, j) match {
-//          case (row , 2) if row == rowSize + 1 => root.add(generateButton(1.toString, numberButtonHandler(1.toString)), 2, row)
-//          case (row , 3) if row == rowSize + 1 => root.add(generateButton(2.toString, numberButtonHandler(2.toString)), 3, row)
-//          case (row , 4) if row == rowSize + 1 => root.add(generateButton(3.toString, numberButtonHandler(3.toString)), 4, row)
-//          case (row , 2) if row == rowSize + 2 => root.add(generateButton(4.toString, numberButtonHandler(4.toString)), 2, row)
-//          case (row , 3) if row == rowSize + 2 => root.add(generateButton(5.toString, numberButtonHandler(5.toString)), 3, row)
-//          case (row , 4) if row == rowSize + 2 => root.add(generateButton(6.toString, numberButtonHandler(6.toString)), 4, row)
-//          case (row , 2) if row == rowSize + 3 => root.add(generateButton(7.toString, numberButtonHandler(7.toString)), 2, row)
-//          case (row , 3) if row == rowSize + 3 => root.add(generateButton(8.toString, numberButtonHandler(8.toString)), 3, row)
-//          case (row , 4) if row == rowSize + 3 => root.add(generateButton(9.toString, numberButtonHandler(9.toString)), 4, row)
-//
-//          case (row, col) if row == rowSize + 1 && col == 6 => root.add(generateActionButton(Check), col, row, 2, 1)
-//          case (row, col) if row == rowSize + 2 && col == 6 => root.add(generateActionButton(NewBoard), col, row, 2 ,1)
-//          case (row, col) if row == rowSize + 3 && col == 6 => root.add(generateActionButton(BoardQuit), col, row, 2 ,1)
-//
-//          case (row, col) if (row == rowSize + 2 && col == 7) || (row == rowSize + 3 && col == 7) || (row == rowSize + 1 && col == 7) =>
-//          case( _, _) => root.add(createEmptyContainer(), j, i )
-//        }
-//      }
-//    }
-//
-//    root
-//  }
 
   def generateWinBox(): GridPane = {
     val winPane = new GridPane()
@@ -289,7 +226,7 @@ class KakuroView extends GenericView {
     root.getChildren.add(gameScene)
 
     root.setId("App")
-    val scene = new Scene(root, 700, 700)
+    val scene = new Scene(root)
 
     scene
   }
