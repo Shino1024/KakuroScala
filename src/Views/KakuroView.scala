@@ -20,12 +20,14 @@ class KakuroView extends GenericView {
   private var keyButtonHandler: HBox => EventHandler[MouseEvent] = _
   private var numberButtonHandler: String => EventHandler[ActionEvent] = _
 
-  private var saveHighscoreButtonHandler: (TextField, StackPane) => EventHandler[ActionEvent] = _
-  private var backButtonHandler: EventHandler[ActionEvent] = _
+  private var saveHighscoreButtonHandler: TextField => EventHandler[ActionEvent] = _
+  private var confirmButtonHandler: EventHandler[ActionEvent] = _
 
   private var kakuroBoard: KakuroBoard = _
 
   private var finishTime: LocalTime = _
+
+  private var inputDisabled = false
 
   private val root: StackPane = new StackPane
 
@@ -45,12 +47,12 @@ class KakuroView extends GenericView {
     numberButtonHandler = buttonEventHandler
   }
 
-  def injectSaveHighscoreButtonHandler(buttonEventHandler: (TextField, StackPane) => EventHandler[ActionEvent]): Unit = {
+  def injectSaveHighscoreButtonHandler(buttonEventHandler: TextField => EventHandler[ActionEvent]): Unit = {
     saveHighscoreButtonHandler = buttonEventHandler
   }
 
-  def injectBackButtonHandler(buttonEventHandler: EventHandler[ActionEvent]): Unit = {
-    backButtonHandler = buttonEventHandler
+  def injectConfirmButtonHandler(buttonEventHandler: EventHandler[ActionEvent]): Unit = {
+    confirmButtonHandler = buttonEventHandler
   }
 
   def setFinishTime(time: LocalTime): Unit = {
@@ -58,21 +60,23 @@ class KakuroView extends GenericView {
   }
 
   def disableInput(): Unit = {
-    for (actionType <- List(NewBoard, Check, BoardQuit)) {
-      actionButtonHandlers.update(actionType, dummyHandler[ActionEvent]())
-    }
+    inputDisabled = true
+  }
 
-    numberButtonHandler = { _: String =>
-      dummyHandler[ActionEvent]()
-    }
-
-    keyButtonHandler = { _: HBox =>
-      dummyHandler[MouseEvent]()
-    }
+  def enableInput(): Unit = {
+    inputDisabled = false
   }
 
   def injectKakuroBoard(_kakuroBoard: KakuroBoard): Unit = {
     kakuroBoard = _kakuroBoard
+  }
+
+  def controlHandle[T <: javafx.event.Event](handler: EventHandler[T]): EventHandler[T] = {
+    if (inputDisabled) {
+      dummyHandler[T]()
+    } else {
+      handler
+    }
   }
 
   def generateActionButton(kakuroButton: KakuroButton): HBox = {
@@ -134,7 +138,7 @@ class KakuroView extends GenericView {
         val container = new HBox(text)
         container.setId("InputCell")
         HBox.setHgrow(text, Priority.ALWAYS)
-        container.setOnMouseClicked(keyButtonHandler(container))
+        container.setOnMouseClicked(controlHandle[MouseEvent](keyButtonHandler(container)))
         kakuroCell.setBox(container)
         container
 
@@ -151,15 +155,16 @@ class KakuroView extends GenericView {
 
   def updateKakuroBoardView(): Unit = {
     val newBoardView = new GridPane
-    newBoardView.add(makeKakuroBoard(), 0, 0)
-    newBoardView.add(makeControlPanel(), 0, 1)
+    newBoardView.add(makeKakuroBoard(), 0, 0, Settings.boardSize.id + 5,1)
+    newBoardView.add(makeControlPanel(), 0, 1, Settings.boardSize.id + 5, 1)
     root.getChildren.set(0, newBoardView)
   }
 
   def makeKakuroBoard(): GridPane = {
     val root = new GridPane
-    root.setId("Center")
+    root.setId("KakuroControlPanel")
 
+    println(kakuroBoard)
     for (i <- 0 until kakuroBoard.size.id) {
       for (j <- 0 until kakuroBoard.size.id) {
         root.add(createContainer(kakuroBoard.getMatrixCell(i,j)), j, i)
@@ -171,14 +176,12 @@ class KakuroView extends GenericView {
 
   def makeControlPanel(): GridPane = {
     val root = new GridPane
-
-    val rowSize = kakuroBoard.size.id
-    val colSize = kakuroBoard.size.id
+    root.setId("KakuroControlPanel")
 
     for (i <- 0 to 2) {
       for (j <- 0 to 2) {
         val strNum = (i * 3 + j + 1).toString
-        val button = generateButton(strNum, numberButtonHandler(strNum))
+        val button = generateButton(strNum, controlHandle[ActionEvent](numberButtonHandler(strNum)))
         button.setMaxWidth(20f)
         root.add(button, j, i)
       }
@@ -199,7 +202,7 @@ class KakuroView extends GenericView {
 
   def generateWinBox(): GridPane = {
     val winPane = new GridPane()
-    winPane.setId("WinPane")
+    winPane.setId("Window")
 
     val winCaption = generateCaption("Congratulations!", MinorCaption)
     val timeCaption = generateCaption("Your time: ", TinyCaption)
@@ -208,7 +211,7 @@ class KakuroView extends GenericView {
     val nick = new TextField
     nick.setPromptText("Your nick")
 
-    val submitButton = generateButton("Submit", saveHighscoreButtonHandler(nick, root))
+    val submitButton = generateButton("Submit", saveHighscoreButtonHandler(nick))
 
     winPane.add(winCaption, 0, 0, 2, 1)
     winPane.add(timeCaption, 0, 1)
@@ -219,16 +222,45 @@ class KakuroView extends GenericView {
     winPane
   }
 
+  def generateCheckWrongBox(): GridPane = {
+    val cwPane = new GridPane()
+    cwPane.setId("Window")
+
+    val informationButton = generateCaption("Not yet there,\nbut don't give up!", MinorCaption)
+    val confirmButton = generateButton("OK", confirmButtonHandler)
+
+    cwPane.add(informationButton, 0, 0)
+    cwPane.add(confirmButton, 0, 1)
+
+    cwPane
+  }
+
   def displayWinBox(): Unit = {
     root.getChildren.add(generateWinBox())
   }
 
+  def displayCheckWrongBox(): Unit = {
+    root.getChildren.add(generateCheckWrongBox())
+  }
+
+  def removeWinBox(): Unit = {
+    root.getChildren.remove(root.getChildren.size - 1)
+  }
+
+  def removeCheckWrongBox(): Unit = {
+    root.getChildren.remove(root.getChildren.size - 1)
+  }
+
   override def generateScene: Scene = {
     val gameScene = new GridPane
-    gameScene.add(makeKakuroBoard(), 0, 0, Settings.boardSize.id + 5,1)
-    gameScene.add(makeControlPanel(), 0, 1)
+    val kakuroBoardView = makeKakuroBoard()
+    val controlPanelView = makeControlPanel()
+    controlPanelView.setId("KakuroControlPanel")
 
+    gameScene.add(kakuroBoardView, 0, 0, Settings.boardSize.id + 5,1)
+    gameScene.add(controlPanelView, 0, 1, Settings.boardSize.id + 5, 1)
     root.getChildren.add(gameScene)
+    println("Centered????\n\n\n")
 
     root.setId("App")
     val scene = new Scene(root)

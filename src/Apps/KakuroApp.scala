@@ -12,5 +12,6 @@ class KakuroApp extends Application {
   override def start(primaryStage: Stage) {
     kakuroController.setStage(primaryStage)
     kakuroController.showStage()
+    println("STAGE SET")
   }
 }

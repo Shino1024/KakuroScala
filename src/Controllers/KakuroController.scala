@@ -30,17 +30,18 @@ class KakuroController extends GenericController {
   private var startTime: LocalDateTime = LocalDateTime.now()
   private var endTime: LocalDateTime = _
 
-  installBaseHandlers()
-
-  kakuroView.injectSaveHighscoreButtonHandler(saveHighscoreButtonHandler)
-
-  kakuroView.injectKakuroBoard(generateCellBoard())
-
   override def setStage(stage: Stage): Unit = {
     primaryStage = stage
   }
 
   override def showStage(): Unit = {
+    kakuroView.injectKakuroBoard(generateCellBoard())
+
+    installBaseHandlers()
+
+    kakuroView.injectSaveHighscoreButtonHandler(saveHighscoreButtonHandler)
+    kakuroView.injectConfirmButtonHandler(confirmHighscoreButtonHandler)
+
     val scene = kakuroView.generateScene
     val boardName = Settings.boardSize.toString.toLowerCase
     primaryStage.setTitle("Kakuro game: " + boardName + " board")
@@ -76,11 +77,11 @@ class KakuroController extends GenericController {
     val handler = new EventHandler[ActionEvent] {
       def handle(e: ActionEvent): Unit = {
         kakuroView.disableInput()
-        kakuroView.setFinishTime(getTime)
-        kakuroView.displayWinBox()
+//        kakuroView.setFinishTime(getTime)
+//        kakuroView.displayWinBox()
+        kakuroView.displayCheckWrongBox()
 
         println("Check board", sumBoard.checkBoard())
-
       }
     }
 
@@ -109,18 +110,29 @@ class KakuroController extends GenericController {
     kakuroView.injectKeyButtonHandler(selectedCellHandler)
   }
 
-  def saveHighscoreButtonHandler(nick: TextField, stackPane: StackPane): EventHandler[ActionEvent] = {
+  def saveHighscoreButtonHandler(nick: TextField): EventHandler[ActionEvent] = {
     val handler = new EventHandler[ActionEvent] {
       def handle(e: ActionEvent): Unit = {
         val newHighscore = Highscore(nick.getText, LocalDate.now, getTime)
         HighscoreDatabase.updateHighscores(newHighscore, Settings.boardSize)
-        stackPane.getChildren.remove(stackPane.getChildren.size() - 1)
+        kakuroView.removeWinBox()
 
-        installBaseHandlers()
+        kakuroView.enableInput()
 
         startTimer()
         kakuroView.injectKakuroBoard(generateCellBoard())
         kakuroView.updateKakuroBoardView()
+      }
+    }
+
+    handler
+  }
+
+  def confirmHighscoreButtonHandler: EventHandler[ActionEvent] = {
+    val handler = new EventHandler[ActionEvent] {
+      override def handle(event: ActionEvent): Unit = {
+        kakuroView.removeCheckWrongBox()
+        kakuroView.enableInput()
       }
     }
 

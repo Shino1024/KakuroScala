@@ -133,16 +133,16 @@
     -fx-padding: 10;
 }
 
-#Center {
-    -fx-alignment: center;
-}
-
 #HighscoreTable {
     -fx-pref-width: 400;
     -fx-pref-height: 145;
 }
 
-#SizeChooser {
+#IntroSizeChooser {
+    -fx-alignment: center;
+}
+
+#KakuroControlPanel {
     -fx-alignment: center;
 }
 
@@ -169,7 +169,7 @@
     -fx-padding: 8;
 }
 
-#WinPane {
+#Window {
     -fx-padding: 10;
     -fx-max-width: 300;
     -fx-max-height: 150;

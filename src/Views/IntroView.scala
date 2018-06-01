@@ -41,7 +41,7 @@ class IntroView extends GenericView {
 
   def generateRadioButtons(): HBox = {
     val root = new HBox
-    root.setId("SizeChooser")
+    root.setId("IntroSizeChooser")
     root.setSpacing(80f)
 
     val boardButtons = new ToggleGroup
@@ -64,6 +64,7 @@ class IntroView extends GenericView {
       buttonsArrayList.add(radioButton)
     }
     buttonsArrayList.get(0).setSelected(true)
+    Settings.boardSize = BoardSize.SMALL
 
     root.getChildren.addAll(buttonsArrayList)
 
