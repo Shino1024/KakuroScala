@@ -113,7 +113,7 @@ class KakuroView extends GenericView {
               text.setText("\n" + value.toString)
 
             case (value1, value2) =>
-              text.setText("    " + value1.toString + "\n " + value2.toString)
+              text.setText("    " + value2.toString + "\n " + value1.toString)
         }
 
         val container = new HBox(text)

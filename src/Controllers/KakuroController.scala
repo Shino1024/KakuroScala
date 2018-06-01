@@ -335,7 +335,7 @@ class KakuroController extends GenericController {
 
 
               val sumValue = Random.nextInt(34) + 1
-              kakuroCell.setVValue(sumValue)
+              kakuroCell.setHValue(sumValue)
               sumBoard.addMatrixSumCell(new KakuroSumCell(sumValue))
               sumBoard.addList()
 
@@ -363,7 +363,7 @@ class KakuroController extends GenericController {
 
 
               val sumValue = Random.nextInt(34) + 1
-              kakuroCell.setHValue(sumValue)
+              kakuroCell.setVValue(sumValue)
               sumBoard.addMatrixSumCell(new KakuroSumCell(sumValue))
               sumBoard.addList()
             }
