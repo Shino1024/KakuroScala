@@ -1,12 +1,12 @@
 #Button {
     -fx-text-fill: white;
     -fx-font-size: 15;
-    -fx-font-family: "Fira Code";
+    -fx-font-family: "Arial";
     -fx-font-weight: bold;
     -fx-pref-height: 50;
     -fx-pref-width: 150;
     -fx-background-color: linear-gradient(#2f3441, #212531);
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.6), 5, 0.0, 0, 1);
     -fx-border-radius: 4px;
     -fx-border-color: antiquewhite;
 }
@@ -30,7 +30,7 @@
 #InfoText {
     -fx-fill: darkred;
     -fx-font-size: 15;
-    -fx-font-family: "Fira Code";
+    -fx-font-family: "Arial";
     -fx-font-weight: bold;
     -fx-aligment: center;
 }
@@ -40,7 +40,7 @@
 #TitleCaption {
     -fx-fill: darkred;
     -fx-font-size: 40;
-    -fx-font-family: "Fira Code";
+    -fx-font-family: "Arial";
     -fx-font-weight: bold;
     -fx-aligment: center;
 }
@@ -53,7 +53,7 @@
 #MinorCaption {
     -fx-fill: darkgreen;
     -fx-font-size: 20;
-    -fx-font-family: "Fira Code";
+    -fx-font-family: "Arial";
     -fx-font-weight: bold;
     -fx-aligment: center;
 }
@@ -79,7 +79,7 @@
 #InputCellText {
     -fx-fill: black;
     -fx-font-size: 25;
-    -fx-font-family: "Fira Code";
+    -fx-font-family: "Arial";
     -fx-font-weight: bold;
     -fx-aligment: center;
 }
@@ -104,7 +104,6 @@
 }
 
 #AdjacentCell {
-
     -fx-background-color: #a9eea5;
     -fx-alignment: center;
     -fx-border-color:  black;
@@ -125,17 +124,13 @@
 #HintCellText {
     -fx-fill: whitesmoke;
     -fx-font-size: 15;
-    -fx-font-family: "Fira Code";
+    -fx-font-family: "Arial";
     -fx-font-weight: bold;
 }
 
 #EmptyCell {
     -fx-alignment: center;
     -fx-padding: 10;
-    /*-fx-min-height: 40;*/
-    /*-fx-min-width: 40;*/
-    /*-fx-max-height: 40;*/
-    /*-fx-max-width: 40;*/
 }
 
 #Center {
