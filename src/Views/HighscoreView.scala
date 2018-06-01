@@ -7,7 +7,6 @@ import Models.{BoardSize, Highscore, HighscoreDatabase}
 import Views.ViewGenerator.{generateButton, generateCaption}
 import javafx.collections.FXCollections
 import javafx.event.{ActionEvent, EventHandler}
-import javafx.geometry.Insets
 import javafx.scene.Scene
 import javafx.scene.control.cell.PropertyValueFactory
 import javafx.scene.control.{TableColumn, TableView}
@@ -61,7 +60,6 @@ class HighscoreView extends GenericView {
 
   def generateTables(): GridPane = {
     val tablesPane = new GridPane()
-    tablesPane.setPadding(new Insets(10, 10, 10, 10))
 
     tablesPane.add(generateCaption("Highscores", TitleCaption), 0, 0)
 
