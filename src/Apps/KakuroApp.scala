@@ -7,7 +7,7 @@ import javafx.application.Application
 import javafx.stage.Stage
 
 class KakuroApp extends Application {
-  private var kakuroController = new KakuroController
+  private val kakuroController = new KakuroController
 
   override def start(primaryStage: Stage) {
     kakuroController.setStage(primaryStage)

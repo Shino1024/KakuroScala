@@ -6,9 +6,11 @@ import javafx.application.Application
 import javafx.stage.Stage
 
 class IntroApp extends Application {
-  private val introView = new IntroView
+  private val introController = new IntroController
 
-  override def start(primaryStage: Stage) {
+  override def start(primaryStage: Stage): Unit = {
+    introController.setStage(primaryStage)
+    introController.showStage()
   }
 
 }

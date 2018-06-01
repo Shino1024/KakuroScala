@@ -2,6 +2,8 @@ package Controllers
 
 import Apps.{HighscoreApp, KakuroApp}
 import Views.{GameQuit, IntroView, Play, Scores}
+import Util.UtilFunctions
+
 import javafx.event.{ActionEvent, EventHandler}
 import javafx.stage.Stage
 
@@ -53,7 +55,7 @@ class IntroController extends GenericController {
   def quitButtonEventHandler(stage: Stage): EventHandler[ActionEvent] = {
     val handler = new EventHandler[ActionEvent] {
       def handle(e: ActionEvent): Unit = {
-        Util.UtilFunctions.exitGame
+        UtilFunctions.exitGame
       }
     }
 

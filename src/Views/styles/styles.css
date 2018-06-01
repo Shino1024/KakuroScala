@@ -117,12 +117,13 @@
 
 #WinPane {
     -fx-padding: 10;
-    -fx-pref-width: 300;
-    -fx-pref-height: 150;
+    -fx-max-width: 300;
+    -fx-max-height: 150;
     -fx-border-radius: 10;
     -fx-border-width: 5;
     -fx-border-color: linear-gradient(#010511, #0f1421);
     -fx-background-color: linear-gradient(#0f1421, #010511);
+    -fx-alignment: center;
 }
 
 #App {
