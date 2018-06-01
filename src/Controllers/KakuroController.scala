@@ -60,7 +60,9 @@ class KakuroController extends GenericController {
   def numberButtonHandler(text: String): EventHandler[ActionEvent] = {
     val handler = new EventHandler[ActionEvent] {
       def handle(e: ActionEvent): Unit = {
-        changeSelectedCellText(text)
+        if (kakuroView.isInputDisabled) {
+          changeSelectedCellText(text)
+        }
       }
     }
 
@@ -93,7 +95,9 @@ class KakuroController extends GenericController {
   def checkButtonEventHandler(_stage: Stage): EventHandler[ActionEvent] = {
     val handler = new EventHandler[ActionEvent] {
       def handle(e: ActionEvent): Unit = {
-        winProcedure
+        if (kakuroView.isInputDisabled) {
+          winProcedure
+        }
       }
     }
 
@@ -103,10 +107,12 @@ class KakuroController extends GenericController {
   def newBoardEventHandler(stage: Stage): EventHandler[ActionEvent] = {
     val handler = new EventHandler[ActionEvent] {
       def handle(e: ActionEvent): Unit = {
-        startTimer()
-        runClock()
-        kakuroView.injectKakuroBoard(generateCellBoard())
-        kakuroView.updateKakuroBoardView()
+        if (kakuroView.isInputDisabled) {
+          startTimer()
+          runClock()
+          kakuroView.injectKakuroBoard(generateCellBoard())
+          kakuroView.updateKakuroBoardView()
+        }
       }
     }
 
@@ -182,7 +188,9 @@ class KakuroController extends GenericController {
   def selectedCellHandler(cell: HBox): EventHandler[MouseEvent] = {
     val handler = new EventHandler[MouseEvent] {
       def handle(e: MouseEvent): Unit = {
-        changeCellSelection(cell)
+        if (kakuroView.isInputDisabled) {
+          changeCellSelection(cell)
+        }
       }
     }
 

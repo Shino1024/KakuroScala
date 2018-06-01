@@ -39,6 +39,8 @@ class KakuroView extends GenericView {
     override def handle(event: T): Unit = {}
   }
 
+  def isInputDisabled: Boolean = !inputDisabled
+
   def injectActionButtonHandler(kakuroButton: KakuroButton, buttonEventHandler: EventHandler[ActionEvent]): Unit = {
     actionButtonHandlers.update(kakuroButton, buttonEventHandler)
   }
