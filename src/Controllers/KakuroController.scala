@@ -75,10 +75,15 @@ class KakuroController extends GenericController {
   def checkButtonEventHandler(_stage: Stage): EventHandler[ActionEvent] = {
     val handler = new EventHandler[ActionEvent] {
       def handle(e: ActionEvent): Unit = {
-        kakuroView.disableInput()
-        kakuroView.setFinishTime(getTime)
-        kakuroView.displayWinBox()
-        println(sumBoard.checkBoard())
+
+        if(sumBoard.checkBoard()) {
+          kakuroView.disableInput()
+          kakuroView.setFinishTime(getTime)
+          kakuroView.displayWinBox()
+        }else{
+          print("false")
+        }
+
       }
     }
 

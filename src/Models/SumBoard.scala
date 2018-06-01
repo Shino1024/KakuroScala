@@ -1,6 +1,5 @@
 package Models
 
-import Controllers.KakuroController.selectedCell
 import javafx.scene.Node
 import javafx.scene.text.Text
 

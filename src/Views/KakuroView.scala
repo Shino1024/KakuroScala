@@ -79,11 +79,26 @@ class KakuroView extends GenericView {
 
   private def createEmptyContainer(): HBox = {
     val emptyContainer = new HBox
-    emptyContainer.setId("ButtonContainer")
+    emptyContainer.setId("EmptyCell")
 
     emptyContainer
   }
 
+  def createInfoContainer(info: String): HBox = {
+
+    val text: Text = new Text
+    text.setText(info)
+    text.setId("InfoText")
+
+    val container = new HBox(text)
+    HBox.setHgrow(text, Priority.ALWAYS)
+    container.setId("EmptyCell")
+
+    container
+
+
+
+  }
   def createContainer(kakuroCell: KakuroCell): HBox = {
     kakuroCell match {
       case kakuroCell: KakuroHintCell =>
@@ -154,38 +169,41 @@ class KakuroView extends GenericView {
     val rowSize = kakuroBoard.size.id
     val colSize = kakuroBoard.size.id
 
-    for (i <- 0 to 4) {
-      root.add(createEmptyContainer(), 0, i )
-      root.add(createEmptyContainer(), colSize + 1, i )
-    }
+
+
+
 
     for (i <- 0 to colSize + 1) {
       root.add(createEmptyContainer(), i, 0 )
-      root.add(createEmptyContainer(), i, 4 )
+      root.add(createEmptyContainer(), i, rowSize + 4 )
     }
 
+
+
     for (i <- 1 to 3) {
-      for (j <- 1 to colSize + 1) {
+      for (j <- 0 to colSize + 1) {
 
         (i, j) match {
-          case (row , 2) if row == 1 => root.add(generateButton(1.toString, numberButtonHandler(1.toString)), 2, row)
-          case (row , 3) if row == 1 => root.add(generateButton(2.toString, numberButtonHandler(2.toString)), 3, row)
-          case (row , 4) if row == 1 => root.add(generateButton(3.toString, numberButtonHandler(3.toString)), 4, row)
-          case (row , 2) if row == 2 => root.add(generateButton(4.toString, numberButtonHandler(4.toString)), 2, row)
-          case (row , 3) if row == 2 => root.add(generateButton(5.toString, numberButtonHandler(5.toString)), 3, row)
-          case (row , 4) if row == 2 => root.add(generateButton(6.toString, numberButtonHandler(6.toString)), 4, row)
-          case (row , 2) if row == 3 => root.add(generateButton(7.toString, numberButtonHandler(7.toString)), 2, row)
-          case (row , 3) if row == 3 => root.add(generateButton(8.toString, numberButtonHandler(8.toString)), 3, row)
-          case (row , 4) if row == 3 => root.add(generateButton(9.toString, numberButtonHandler(9.toString)), 4, row)
+          case (row , 1) if row == 1 => root.add(generateButton(1.toString, numberButtonHandler(1.toString)), 1, row)
+          case (row , 2) if row == 1 => root.add(generateButton(2.toString, numberButtonHandler(2.toString)), 2, row)
+          case (row , 3) if row == 1 => root.add(generateButton(3.toString, numberButtonHandler(3.toString)), 3, row)
+          case (row , 1) if row == 2 => root.add(generateButton(4.toString, numberButtonHandler(4.toString)), 1, row)
+          case (row , 2) if row == 2 => root.add(generateButton(5.toString, numberButtonHandler(5.toString)), 2, row)
+          case (row , 3) if row == 2 => root.add(generateButton(6.toString, numberButtonHandler(6.toString)), 3, row)
+          case (row , 1) if row == 3 => root.add(generateButton(7.toString, numberButtonHandler(7.toString)), 1, row)
+          case (row , 2) if row == 3 => root.add(generateButton(8.toString, numberButtonHandler(8.toString)), 2, row)
+          case (row , 3) if row == 3 => root.add(generateButton(9.toString, numberButtonHandler(9.toString)), 3, row)
 
-          case (row, col) if row == 1 && col == 6 => root.add(generateActionButton(Check), col, row, 2, 1)
-          case (row, col) if row == 2 && col == 6 => root.add(generateActionButton(NewBoard), col, row, 2 ,1)
-          case (row, col) if row == 3 && col == 6 => root.add(generateActionButton(BoardQuit), col, row, 2 ,1)
+          case (row, col) if row == 1 && col == 7 => root.add(generateActionButton(Check), col, row, 2, 1)
+          case (row, col) if row == 2 && col == 7 => root.add(generateActionButton(NewBoard), col, row, 2 ,1)
+          case (row, col) if row == 3 && col == 7 => root.add(generateActionButton(BoardQuit), col, row, 2 ,1)
+          case (row, col) if row == 1 && col == 4 => root.add(createInfoContainer("WRONG ANSWER :("), col, row, 3 ,1)
 
-          case (row, col) if (row == 2 && col == 7) || (row == 3 && col == 7) || (row == 1 && col == 7) =>
+          case (row, col) if (row == 2 && col == 8) || (row == 3 && col == 8) || (row == 1 && col == 8) ||
+                             (row == 1 && col == 5) || (row == 1 && col == 6)  =>
           case( _, _) => root.add(createEmptyContainer(), j, i )
-        }
-      }
+        }}
+
     }
 
     root
@@ -265,7 +283,7 @@ class KakuroView extends GenericView {
 
   override def generateScene: Scene = {
     val gameScene = new GridPane
-    gameScene.add(makeKakuroBoard(), 0, 0, kakuroBoard.size.id + 1, 1)
+    gameScene.add(makeKakuroBoard(), 0, 0, Settings.boardSize.id + 5,1)
     gameScene.add(makeControlPanel(), 0, 1)
 
     root.getChildren.add(gameScene)
