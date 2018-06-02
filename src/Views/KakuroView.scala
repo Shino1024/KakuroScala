@@ -117,7 +117,7 @@ class KakuroView extends GenericView {
         val text = new Text
         text.setId("HintCellText")
 
-        (kakuroCell.getVValue, kakuroCell.getHValue) match {
+        (kakuroCell.getDownValue, kakuroCell.getRightValue) match {
             case (0, 0) =>
               text.setText("")
 
@@ -125,10 +125,10 @@ class KakuroView extends GenericView {
               text.setText("    " + value.toString + "\n")
 
             case (value, 0) if value != 0 =>
-              text.setText("\n" + value.toString)
+              text.setText("     \n" + value.toString + "   ")
 
             case (value1, value2) =>
-              text.setText("    " + value2.toString + "\n " + value1.toString)
+              text.setText("    " + value2.toString + "\n" + value1.toString + "   ")
         }
 
         val container = new HBox(text)
@@ -148,7 +148,7 @@ class KakuroView extends GenericView {
         kakuroCell.setBox(container)
         container
 
-      case kakuroCell: KakuroEmptyCell =>
+      case _: KakuroEmptyCell =>
         val textField = new TextField()
 
         val container = new HBox(textField)

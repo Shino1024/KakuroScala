@@ -24,7 +24,7 @@ class KakuroController extends GenericController {
   private var primaryStage: Stage = _
 
   private val kakuroBoard: KakuroBoard = new KakuroBoard(Settings.boardSize)
-  private var logicBoard = generateLogicBoard(Settings.boardSize.id, Settings.boardSize.id)
+  private var logicBoard = generateLogicBoard(Settings.boardSize.id)
   private var sumBoard = new SumBoard()
 
   private var selectedCell: HBox = _
@@ -121,7 +121,7 @@ class KakuroController extends GenericController {
         if (kakuroView.isInputEnabled) {
           startTimer()
           runClock()
-          logicBoard = generateLogicBoard(Settings.boardSize.id, Settings.boardSize.id)
+          logicBoard = generateLogicBoard(Settings.boardSize.id)
           kakuroView.injectKakuroBoard(generateCellBoard())
           kakuroView.updateKakuroBoardView()
         }
@@ -153,7 +153,7 @@ class KakuroController extends GenericController {
         startTimer()
         runClock()
 
-        logicBoard = generateLogicBoard(Settings.boardSize.id, Settings.boardSize.id)
+        logicBoard = generateLogicBoard(Settings.boardSize.id)
         kakuroView.injectKakuroBoard(generateCellBoard())
         kakuroView.updateKakuroBoardView()
       }
@@ -234,7 +234,7 @@ class KakuroController extends GenericController {
               var markedFlag = true
 
               //UP
-              for(k <- row to 0 by -1 ; if markedFlag == true){
+              for(k <- row to 0 by -1 ; if markedFlag){
 
                val cell = kakuroBoard.getMatrixCell(k,column)
 
@@ -246,7 +246,7 @@ class KakuroController extends GenericController {
 
               //DOWN
               markedFlag = true
-              for(k <- row until Settings.boardSize.id; if markedFlag == true){
+              for(k <- row until Settings.boardSize.id; if markedFlag){
 
                 val cell = kakuroBoard.getMatrixCell(k,column)
 
@@ -258,7 +258,7 @@ class KakuroController extends GenericController {
 
               //RIGHT
               markedFlag = true
-              for(k <- column until Settings.boardSize.id; if markedFlag == true){
+              for(k <- column until Settings.boardSize.id; if markedFlag){
 
                 val cell = kakuroBoard.getMatrixCell(row,k)
 
@@ -270,7 +270,7 @@ class KakuroController extends GenericController {
 
               //LEFT
               markedFlag = true
-              for(k <- column to 0 by -1; if markedFlag == true){
+              for(k <- column to 0 by -1; if markedFlag){
 
                 val cell = kakuroBoard.getMatrixCell(row,k)
 
@@ -353,40 +353,32 @@ class KakuroController extends GenericController {
 
             var markedFlag = true
 
-            //UP DIRECTION
-            if (i - 1 >= 0 && markedBoard(i - 1)(j) == 0 && logicBoard(i - 1)(j) == 1 && kakuroCell.getVValue == 0) {
 
-              sumBoard.createNewList()
-
-
-                for (k <- i to 0 by -1 ; if markedFlag) {
-                  if (logicBoard(k)(j) == 0 && k != i) {
-                    markedFlag = false
-                  } else {
-                    markedBoard(k)(j) = 1
-
-                    if (k != i)
-                      sumBoard.addMatrixInputCell(kakuroBoard.getMatrixCell(k, j))
-                  }
-                }
-
-
-              val sumValue = Random.nextInt(34) + 1
-              kakuroCell.setHValue(sumValue)
-              sumBoard.addMatrixSumCell(new KakuroSumCell(sumValue))
-              sumBoard.addList()
-
-
-            }
 
             //DOWN DIRECTION
-            if (i + 1 < Settings.boardSize.id && markedBoard(i + 1)(j) == 0 && logicBoard(i + 1)(j) != 0 && kakuroCell.getHValue == 0) {
+            if (i + 1 < Settings.boardSize.id && logicBoard(i + 1)(j) != 0 ) {
 
-              sumBoard.createNewList()
+
+              var inputCellsNumber = 0
+
+              markedFlag = true
+              for (k <- i until Settings.boardSize.id; if markedFlag) {
+                if (logicBoard(k)(j) == 0 && k != i) {
+                  markedFlag = false
+                } else {
+                  if(k != i)
+                  inputCellsNumber = inputCellsNumber + 1
+                }
+              }
+
+              println(inputCellsNumber)
+              if (inputCellsNumber > 1 && inputCellsNumber < 10) {
+
+                sumBoard.createNewList()
 
 
                 markedFlag = true
-                for (k <- i until Settings.boardSize.id ; if markedFlag) {
+                for (k <- i until Settings.boardSize.id; if markedFlag) {
                   if (logicBoard(k)(j) == 0 && k != i) {
                     markedFlag = false
                   } else {
@@ -398,20 +390,52 @@ class KakuroController extends GenericController {
                   }
                 }
 
+                // WE HAVE TO COMPUTE MAX AND MIN SUM POSSIBLE TO MATCH
+                // OF COURSE THESE ARE ARITHMETIC SERIEC FOR FIRST N AND LAST N NUMBERS
 
-              val sumValue = Random.nextInt(34) + 1
-              kakuroCell.setVValue(sumValue)
-              sumBoard.addMatrixSumCell(new KakuroSumCell(sumValue))
-              sumBoard.addList()
+                val minSum = ((1 + inputCellsNumber) * inputCellsNumber) / 2
+                val maxSum = ((9 - inputCellsNumber + 1 + 9) * inputCellsNumber) / 2
+
+                // NOW LET'S CHOSE ANY NUMBER BETWEEN ABOVE SUMS
+                var sumValue = minSum
+
+                if(maxSum != minSum){
+                  sumValue = Random.nextInt(maxSum - minSum) + minSum
+                }
+
+                kakuroCell.setDownValue(sumValue)
+                sumBoard.addMatrixSumCell(new KakuroSumCell(sumValue))
+                sumBoard.addList()
+
+              }
             }
 
             //RIGHT DIRECTION
-            if (j + 1 < Settings.boardSize.id && markedBoard(i)(j + 1) == 0 && logicBoard(i)(j + 1) != 0 && kakuroCell.getHValue == 0) {
+            if (j + 1 < Settings.boardSize.id && logicBoard(i)(j + 1) != 0) {
 
-              sumBoard.createNewList()
+
+              var inputCellsNumber = 0
+
+              markedFlag = true
+              for (k <- j until Settings.boardSize.id; if markedFlag) {
+                if (logicBoard(i)(k) == 0 && k != j)
+                {
+                  markedFlag = false
+                } else {
+                  if(k != j)
+                  inputCellsNumber = inputCellsNumber + 1
+                }
+              }
+
+              println(inputCellsNumber)
+
+              if (inputCellsNumber > 1 && inputCellsNumber < 10) {
+
+
+                sumBoard.createNewList()
 
                 markedFlag = true
-                for (k <- j until Settings.boardSize.id ; if markedFlag) {
+                for (k <- j until Settings.boardSize.id; if markedFlag) {
                   if (logicBoard(i)(k) == 0 && k != j) {
                     markedFlag = false
                   } else {
@@ -423,37 +447,21 @@ class KakuroController extends GenericController {
                   }
                 }
 
+                val minSum = ((1 + inputCellsNumber) * inputCellsNumber) / 2
+                val maxSum = ((9 - inputCellsNumber + 1 + 9) * inputCellsNumber) / 2
 
-              val sumValue = Random.nextInt(34) + 1
-              kakuroCell.setHValue(sumValue)
-              sumBoard.addMatrixSumCell(new KakuroSumCell(sumValue))
-              sumBoard.addList()
-            }
+                var sumValue = minSum
 
-            //LEFT DIRECTION
-            if (j - 1 >= 0 && (markedBoard(i)(j - 1) == 0 && logicBoard(i)(j - 1) != 0) && kakuroCell.getVValue == 0) {
-
-              sumBoard.createNewList()
-
-                markedFlag = true
-                for (k <- j to 0 by -1; if markedFlag) {
-                  if (logicBoard(i)(k) == 0 && k != j) {
-                    markedFlag = false
-                  } else {
-                    markedBoard(i)(k) = 1
-
-                    if (k != j)
-                      sumBoard.addMatrixInputCell(kakuroBoard.getMatrixCell(i, k))
-
-                  }
+                if(maxSum != minSum){
+                   sumValue = Random.nextInt(maxSum - minSum) + minSum
                 }
 
-
-              val sumValue = Random.nextInt(34) + 1
-              kakuroCell.setVValue(sumValue)
-              sumBoard.addMatrixSumCell(new KakuroSumCell(sumValue))
-              sumBoard.addList()
+                kakuroCell.setRightValue(sumValue)
+                sumBoard.addMatrixSumCell(new KakuroSumCell(sumValue))
+                sumBoard.addList()
+              }
             }
+
 
             //WHEN BLACK CELL DON'T NEED TO HAVE NUMBER, BUT WE HAVE TO MARKED IT AS COVERED
             markedBoard(i)(j) = 1
@@ -479,77 +487,74 @@ class KakuroController extends GenericController {
        return kakuroBoard
     else
       sumBoard = new SumBoard
-      logicBoard = generateLogicBoard(Settings.boardSize.id, Settings.boardSize.id)
+      logicBoard = generateLogicBoard(Settings.boardSize.id)
       generateCellBoard()
   }
 
-  def generateLogicBoard(rowSize: Int, colSize: Int): Array[Array[Int]] = {
-    val board = Array.ofDim[Int](rowSize, colSize)
+  def generateLogicBoard(boardSize: Int): Array[Array[Int]] = {
+    val board = Array.ofDim[Int](boardSize, boardSize)
     // NOT DECIDED CELL -> -1
     //BLACK 0
     //WHITE 1
-    for (i <- 0 until rowSize) {
-      for (j <- 0 until colSize) {
+    for (i <- 0 until boardSize) {
+      for (j <- 0 until boardSize) {
         board(i)(j) = -1
       }
     }
 
     //1. BORDERS
-    //ROWS
-    for (i <- 0 until colSize) {
-      board(0)(i) = Random.nextInt(2) // range of {0,1}
-      board(rowSize - 1)(colSize - i - 1) = board(0)(i)
-      //2. ROW 2 AND N-1
-      if (board(0)(i) == 1 && i != colSize - 1 && i != 0) {
-        board(1)(i) = 1
-        board(rowSize - 2)(colSize - i - 1) = 1
-      }
+    //FIRST ROW AND FIRST COLUMN
+    for (i <- 0 until boardSize) {
+      board(0)(i) = 0 // range of {0,1}
+      board(i)(0) = 0
 
     }
 
-    //COLUMNS
-    for (j <- 0 until rowSize) {
-      board(j)(0) = Random.nextInt(2)
-      board(rowSize - j - 1)(colSize - 1) = board(j)(0)
+
+    //LAST ROW AND LAST COLUMN
+    for (i <- 0 until boardSize) {
+      board(boardSize - 1)(i) = Random.nextInt(2)
+      board(i)(boardSize - 1) = Random.nextInt(2)
       // 2. COLUMN 2 AND N-1
-      if (board(j)(0) == 1 && j != rowSize - 1 && j != 0) {
-        board(j)(1) = 1
-        board(rowSize - j - 1)(colSize - 2) = 1
+
+      if (board(i)(0) == 1 && i != boardSize - 1 && i != 0) {
+        board(i)(boardSize - 2) = 1
+        board(boardSize - 2)(i) = 1
       }
     }
 
     //3 CENTER
-    for (i <- 1 until colSize / 2) {
-      if (board(rowSize / 2)(i - 1) == 1) {
+    for (i <- 1 until boardSize / 2) {
+      if (board(boardSize / 2)(i - 1) == 1) {
         if (i == 1) {
-          board(rowSize / 2)(i) = 1
-          board(rowSize / 2)(colSize - i - 1) = 1
+          board(boardSize / 2)(i) = 1
+          board(boardSize / 2)(boardSize - i - 1) = 1
 
         } else {
-          board(rowSize / 2)(i) = 0
-          board(rowSize / 2)(colSize - i - 1) = 0
+          board(boardSize / 2)(i) = 0
+          board(boardSize / 2)(boardSize - i - 1) = 0
         }
       } else {
-        board(rowSize / 2)(i) = 1
-        board(rowSize / 2)(colSize - i - 1) = 1
+        board(boardSize / 2)(i) = 1
+        board(boardSize / 2)(boardSize - i - 1) = 1
       }
     }
 
-    if (colSize % 2 == 1) board(rowSize / 2)(colSize / 2) = 1
+    if (boardSize % 2 == 1) board(boardSize / 2)(boardSize / 2) = 1
 
     //4. RANDOMIZE THE REST
-    for (i <- 1 until (rowSize / 2)) {
-      for (j <- 1 until colSize) {
+    for (i <- 1 until (boardSize / 2)) {
+      for (j <- 1 until boardSize) {
         if (board(i)(j) == -1) {
-          board(i)(j) = (Random.nextFloat() + 0.8).toInt
-          board(rowSize - i - 1)(colSize - j - 1) = board(i)(j)
+          board(i)(j) = (Random.nextFloat() + 0.9).toInt
+          board(boardSize - i - 1)(boardSize - j - 1) = board(i)(j)
         }
       }
     }
 
     // 5. RELEASE BOUNDED WHITE  OR BLACK CELLS
-    for (i <- 1 to (rowSize / 2)) {
-      for (j <- 1 until (colSize - 1)) {
+    for (i <- 1 to (boardSize / 2)) {
+      for (j <- 1 until (boardSize - 1)) {
         if (board(i - 1)(j) == 0 &&
           board(i)(j - 1) == 0 &&
           board(i + 1)(j) == 0 &&
@@ -561,19 +566,19 @@ class KakuroController extends GenericController {
           board(i + 1)(j) = 1
           board(i)(j + 1) = 1
 
-          board(rowSize - i - 2)(colSize - j - 1) = 1
-          board(rowSize - i - 1)(colSize - j - 2) = 1
-          board(rowSize - i)(colSize - j - 1) = 1
-          board(rowSize - i - 1)(colSize - j) = 1
+          board(boardSize - i - 2)(boardSize - j - 1) = 1
+          board(boardSize - i - 1)(boardSize - j - 2) = 1
+          board(boardSize - i)(boardSize - j - 1) = 1
+          board(boardSize - i - 1)(boardSize - j) = 1
         }
       }
     }
 
     //CORNERS
-    board(0)(Settings.boardSize.id - 1) = 0
+    board(0)(boardSize - 1) = 0
     board(0)(0) = 0
-    board(Settings.boardSize.id - 1)(Settings.boardSize.id - 1) = 0
-    board(Settings.boardSize.id - 1)(0) = 0
+    board(boardSize - 1)(boardSize - 1) = 0
+    board(boardSize - 1)(0) = 0
 
     board
   }
