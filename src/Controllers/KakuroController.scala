@@ -349,7 +349,7 @@ class KakuroController extends GenericController {
       for (j <- 0 until Settings.boardSize.id) {
         logicBoard(i)(j) match {
           case 0 =>
-            val kakuroCell = new KakuroHintCell(0, 0)
+            val kakuroCell = new KakuroSumCell(0, 0)
 
             var markedFlag = true
 

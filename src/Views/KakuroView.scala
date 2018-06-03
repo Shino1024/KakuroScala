@@ -113,7 +113,7 @@ class KakuroView extends GenericView {
 
   def createContainer(kakuroCell: KakuroCell): HBox = {
     kakuroCell match {
-      case kakuroCell: KakuroHintCell =>
+      case kakuroCell: KakuroSumCell =>
         val text = new Text
         text.setId("HintCellText")
 
