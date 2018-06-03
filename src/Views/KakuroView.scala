@@ -122,13 +122,13 @@ class KakuroView extends GenericView {
               text.setText("")
 
             case (0, value) if value != 0 =>
-              text.setText("    " + value.toString + "\n")
+              text.setText("     " + value.toString + "\n")
 
             case (value, 0) if value != 0 =>
-              text.setText("     \n" + value.toString + "   ")
+              text.setText("\n" + value.toString + "    ")
 
             case (value1, value2) =>
-              text.setText("    " + value2.toString + "\n" + value1.toString + "   ")
+              text.setText("    " + value2.toString + "\n" + value1.toString + "    ")
         }
 
         val container = new HBox(text)
@@ -137,15 +137,34 @@ class KakuroView extends GenericView {
         container
 
       case kakuroCell: KakuroInputCell =>
-        val text = new Text
-        text.setText("")
-        text.setId("InputCellText")
 
-        val container = new HBox(text)
+        val cellRepresentation = new StackPane
+
+        val singleCell = new Text
+        singleCell.setText("")
+        singleCell.setId("InputCellText")
+
+        val multiCell = new GridPane
+
+        for(i <- 0 to 2){
+          for(j <- 0 to 2){
+            val currentText = new Text
+            currentText.setText("")
+            currentText.setId("InputMultiCellText")
+            currentText.setWrappingWidth(13)
+            multiCell.add(currentText, j, i)
+          }
+        }
+
+        cellRepresentation.getChildren.addAll(singleCell, multiCell)
+
+        val container = new HBox(cellRepresentation)
         container.setId("InputCell")
-        HBox.setHgrow(text, Priority.ALWAYS)
+        HBox.setHgrow(cellRepresentation, Priority.ALWAYS)
         container.setOnMouseClicked(controlHandle[MouseEvent](keyButtonHandler(container)))
+
         kakuroCell.setBox(container)
+        kakuroCell.setCellRepresentation(cellRepresentation)
         container
 
       case _: KakuroEmptyCell =>

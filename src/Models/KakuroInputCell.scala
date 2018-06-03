@@ -1,26 +1,38 @@
 package Models
 
-import java.util
-
-import javafx.scene.layout.HBox
+import java.util.Collections
+import javafx.collections.{FXCollections, ObservableList}
+import Views.{EmptyCell, InputCellsArity, MultiDigit, SingleDigit}
+import javafx.scene.Node
+import javafx.scene.layout.{GridPane, HBox, StackPane}
+import javafx.scene.text.Text
 
 class KakuroInputCell(row_pos: Int, column_pos: Int) extends KakuroCell {
-  private var numbers: Array[Boolean] = new Array[Boolean](10)
+
+  private val numbers: Array[Boolean] = new Array[Boolean](10)
   val NUMS = 10
 
   //INITIAL VALUE - EMPTY CELL
-  private var box:HBox = _
+  private var box: HBox = _
+  private var cellRepresentation: StackPane = _
   private val row: Int = row_pos
   private val column: Int = column_pos
+  private var inputCellsArity: InputCellsArity = EmptyCell
 
 
-  def setBox(hbox: HBox):Unit = {
+  def setCellRepresentation(stackPane: StackPane): Unit = {
+    cellRepresentation = stackPane
+  }
+
+  def setBox(hbox: HBox): Unit = {
     box = hbox
   }
-  def getBox:HBox  = box
 
-  def getRow :Int = row
-  def getColumn :Int = column
+  def getBox: HBox = box
+
+  def getRow: Int = row
+
+  def getColumn: Int = column
 
 
   def setNumber(number: Int): Unit = {
@@ -35,15 +47,118 @@ class KakuroInputCell(row_pos: Int, column_pos: Int) extends KakuroCell {
     }
   }
 
-  def getNumbers: util.ArrayList[Int] = {
-    var returnNums: util.ArrayList[Int] = new util.ArrayList[Int]()
-    for (i <- 0 until NUMS) {
-      if (numbers(i)) {
-        returnNums.add(i)
-      }
-    }
+  def isSetNumber(number: Int): Boolean = numbers(number)
 
-    returnNums
+  def amountOfNumbers(): Int = {
+
+    var amount: Int = 0
+
+    for(i <- 1 until NUMS; if numbers(i)) {
+      amount = amount + 1
+    }
+    amount
   }
 
+  def configureRepresentation(): Unit = {
+
+    amountOfNumbers() match {
+
+      case 0 => inputCellsArity = EmptyCell
+      case 1 => inputCellsArity = SingleDigit
+      case n if n > 1 => inputCellsArity = MultiDigit
+    }
+
+    inputCellsArity match {
+
+      case EmptyCell =>
+
+        var node = cellRepresentation.getChildren.get(0)
+
+        node match {
+
+          case _: Text =>
+          case _: GridPane =>
+
+            val children: ObservableList[Node] = FXCollections.observableArrayList(cellRepresentation.getChildren)
+            Collections.swap(children, 0, 1)
+            cellRepresentation.getChildren.setAll(children)
+        }
+
+        node = cellRepresentation.getChildren.get(0)
+
+        node match {
+
+          case node: Text =>
+            node.setText("")
+        }
+
+      case SingleDigit =>
+
+        var node = cellRepresentation.getChildren.get(0)
+
+        node match {
+
+          case _: Text =>
+          case node: GridPane =>
+
+            for(i <- 1 until NUMS){
+              val currentNode = node.getChildren.get(i - 1)
+
+              currentNode match{
+                case cell:Text => cell.setText("")
+              }
+            }
+
+            val children: ObservableList[Node] = FXCollections.observableArrayList(cellRepresentation.getChildren)
+            Collections.swap(children, 0, 1)
+            cellRepresentation.getChildren.setAll(children)
+        }
+
+        node = cellRepresentation.getChildren.get(0)
+
+            node match {
+
+              case node: Text =>
+                for (i <- 1 until NUMS; if numbers(i))
+                  node.setText(i.toString)
+            }
+
+      case MultiDigit =>
+
+        var node = cellRepresentation.getChildren.get(0)
+
+        node match {
+
+          case _: GridPane =>
+          case node: Text =>
+
+            node.setText("")
+
+            val children: ObservableList[Node] = FXCollections.observableArrayList(cellRepresentation.getChildren)
+            Collections.swap(children, 0, 1)
+            cellRepresentation.getChildren.setAll(children)
+        }
+
+        node = cellRepresentation.getChildren.get(0)
+
+        node match {
+          case node: GridPane =>
+
+            for (i <- 1 until NUMS) {
+              val currentNode = node.getChildren.get(i - 1)
+
+              currentNode match {
+
+                case currentNode: Text =>
+                  if (numbers(i)) {
+
+                   currentNode.setText(i.toString)
+                  }else{
+                    currentNode.setText("")
+                  }
+              }
+            }
+        }
+    }
+  }
 }

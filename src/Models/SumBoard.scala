@@ -1,7 +1,7 @@
 package Models
 
 import javafx.scene.Node
-import javafx.scene.layout.HBox
+import javafx.scene.layout.{GridPane, HBox, StackPane}
 import javafx.scene.text.Text
 
 
@@ -9,8 +9,6 @@ class SumBoard() {
 
   private var matrix: List[AuxiliarySumCell] = List()
   private var currentList: List[KakuroCell] = List()
-
-
 
 
   def createNewList():Unit = {
@@ -28,9 +26,6 @@ class SumBoard() {
     matrix = matrix :+ sumCell
 
   }
-
-
-
 
   def checkBoard(): Boolean = {
 
@@ -52,39 +47,43 @@ class SumBoard() {
             var currentValue : Int = 0
 
             node match {
-              case textNode: Text =>
-                if (textNode.getText != ""){
 
-                  currentValue = textNode.getText.toInt
+              case stackPane:StackPane =>
 
-                  if(numbersArr(currentValue) == true) {
-                    return false
-                  }else{
-                    numbersArr(currentValue) = true
-                  }
-                }else {
-                  return false
+                val currentNode = stackPane.getChildren.get(0)
+                currentNode match {
+
+                  case textNode: Text =>
+
+                    if (textNode.getText != "") {
+
+                      currentValue = textNode.getText.toInt
+
+                      if (numbersArr(currentValue)) {
+                        return false
+                      } else {
+                        numbersArr(currentValue) = true
+                      }
+                    } else {
+                      return false
+                    }
+
+                  case _:GridPane => return false
                 }
             }
            inputCellsSum = inputCellsSum + currentValue
 
-          case _ => print("ERROR!")
+          case _ => print("ERROR OCCURED WHILE CHECKING THE ANSWER!")
         }
       }
 
       if (requiredSum != inputCellsSum) return false
-
-      print(requiredSum + " " + inputCellsSum + "\n")
     }
-
       true
   }
 
-
-
   // WILL BE DELETED IN FINAL FORM OF THIS APP
   def showBoard():Unit = {
-
 
     for (sumCell: AuxiliarySumCell <- matrix) {
 

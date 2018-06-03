@@ -1,20 +1,20 @@
 package Models
 
 
-class KakuroSumCell(val _vValue: Int, val _hValue: Int) extends KakuroCell {
+class KakuroSumCell(val _rightValue: Int, val _downValue: Int) extends KakuroCell {
 
-  var vValue: Int = _vValue
-  var hValue: Int = _hValue
+  var rightValue: Int = _rightValue
+  var downValue: Int = _downValue
 
-  def getVValue: Int = vValue
-  def getHValue: Int = hValue
+  def getRightValue: Int = rightValue
+  def getDownValue: Int = downValue
 
-  def setVValue(value:Int):Unit = {
-    vValue = value
+  def setRightValue(value:Int):Unit = {
+    rightValue = value
   }
 
-  def setHValue(value:Int):Unit = {
-    hValue = value
+  def setDownValue(value:Int):Unit = {
+    downValue = value
   }
 
 

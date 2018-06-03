@@ -67,6 +67,7 @@ class KakuroController extends GenericController {
     val handler = new EventHandler[ActionEvent] {
       def handle(e: ActionEvent): Unit = {
         if (kakuroView.isInputEnabled) {
+
           changeSelectedCellText(text)
         }
       }
@@ -106,8 +107,9 @@ class KakuroController extends GenericController {
 //            winProcedure()
 //          } else {
 //            wrongCheckProcedure()
-//          }
-          winProcedure()
+//
+//           winProcedure()
+             println(sumBoard.checkBoard())
         }
       }
     }
@@ -202,9 +204,16 @@ class KakuroController extends GenericController {
 
   private def changeCellSelection(cell: HBox): Unit = {
     if (selectedCell == null) {
+
       selectedCell = cell
       highlightAdjacentCells()
       cell.setId("SelectedInputCell")
+
+    } else if(selectedCell == cell){
+
+      unhighlightEveryCell()
+      selectedCell.setId("InputCell")
+      selectedCell = null
 
     } else {
       unhighlightEveryCell()
@@ -282,7 +291,6 @@ class KakuroController extends GenericController {
 
             }
 
-
           case _ =>
         }
       }
@@ -294,6 +302,7 @@ class KakuroController extends GenericController {
 
     for (i <- 0 until Settings.boardSize.id) {
       for (j <- 0 until Settings.boardSize.id) {
+
         val element = kakuroBoard.getMatrixCell(i,j)
 
         element match {
@@ -306,14 +315,33 @@ class KakuroController extends GenericController {
     }
   }
 
-
   private def changeSelectedCellText(text: String): Unit = {
+
     if (selectedCell != null) {
-      val node: Node = selectedCell.getChildren.get(0)
-      node match {
-        case textNode: Text =>
-          textNode.setText(text)
+
+      for(i <- 0 until Settings.boardSize.id){
+        for(j <- 0 until Settings.boardSize.id){
+
+          kakuroBoard.getMatrixCell(i, j) match{
+
+            case cell:KakuroInputCell =>
+
+              if(cell.getBox == selectedCell) {
+
+                if (cell.isSetNumber(text.toInt)) {
+                  cell.unsetNumber(text.toInt)
+                  cell.configureRepresentation()
+                } else {
+                  cell.setNumber(text.toInt)
+                  cell.configureRepresentation()
+                }
+              }
+
+            case _ =>
+          }
+        }
       }
+
     }
   }
 
@@ -353,8 +381,6 @@ class KakuroController extends GenericController {
 
             var markedFlag = true
 
-
-
             //DOWN DIRECTION
             if (i + 1 < Settings.boardSize.id && logicBoard(i + 1)(j) != 0 ) {
 
@@ -371,11 +397,7 @@ class KakuroController extends GenericController {
                 }
               }
 
-              println(inputCellsNumber)
-              if (inputCellsNumber > 1 && inputCellsNumber < 10) {
-
                 sumBoard.createNewList()
-
 
                 markedFlag = true
                 for (k <- i until Settings.boardSize.id; if markedFlag) {
@@ -391,7 +413,7 @@ class KakuroController extends GenericController {
                 }
 
                 // WE HAVE TO COMPUTE MAX AND MIN SUM POSSIBLE TO MATCH
-                // OF COURSE THESE ARE ARITHMETIC SERIEC FOR FIRST N AND LAST N NUMBERS
+                // OF COURSE THESE ARE ARITHMETIC SERIES FOR FIRST N AND LAST N NUMBERS
 
                 val minSum = ((1 + inputCellsNumber) * inputCellsNumber) / 2
                 val maxSum = ((9 - inputCellsNumber + 1 + 9) * inputCellsNumber) / 2
@@ -404,10 +426,8 @@ class KakuroController extends GenericController {
                 }
 
                 kakuroCell.setDownValue(sumValue)
-                sumBoard.addMatrixSumCell(new KakuroSumCell(sumValue))
-                sumBoard.addList()
+                sumBoard.addMatrixSumList(sumValue)
 
-              }
             }
 
             //RIGHT DIRECTION
@@ -426,11 +446,6 @@ class KakuroController extends GenericController {
                   inputCellsNumber = inputCellsNumber + 1
                 }
               }
-
-              println(inputCellsNumber)
-
-              if (inputCellsNumber > 1 && inputCellsNumber < 10) {
-
 
                 sumBoard.createNewList()
 
@@ -457,11 +472,9 @@ class KakuroController extends GenericController {
                 }
 
                 kakuroCell.setRightValue(sumValue)
-                sumBoard.addMatrixSumCell(new KakuroSumCell(sumValue))
-                sumBoard.addList()
-              }
-            }
+                sumBoard.addMatrixSumList(sumValue)
 
+            }
 
             //WHEN BLACK CELL DON'T NEED TO HAVE NUMBER, BUT WE HAVE TO MARKED IT AS COVERED
             markedBoard(i)(j) = 1
@@ -471,24 +484,15 @@ class KakuroController extends GenericController {
         }
       }
     }
-
-    for (i <- 0 until Settings.boardSize.id) {
-      for (j <- 0 until Settings.boardSize.id) {
-        print(markedBoard(i)(j) + " ")
-
-      }
-      print("\n")
-    }
-    sumBoard.showBoard()
-
-
+    
     //WE HAVE TO CHECK WHETER BOARD IS FULLY MARKED OR NOT
-    if(checkMarkedBoard(markedBoard))
-       return kakuroBoard
-    else
+    if(checkMarkedBoard(markedBoard)) {
+      kakuroBoard
+    } else {
       sumBoard = new SumBoard
       logicBoard = generateLogicBoard(Settings.boardSize.id)
       generateCellBoard()
+    }
   }
 
   def generateLogicBoard(boardSize: Int): Array[Array[Int]] = {
@@ -510,11 +514,10 @@ class KakuroController extends GenericController {
 
     }
 
-
     //LAST ROW AND LAST COLUMN
     for (i <- 0 until boardSize) {
-      board(boardSize - 1)(i) = Random.nextInt(2)
-      board(i)(boardSize - 1) = Random.nextInt(2)
+      board(boardSize - 1)(i) = (Random.nextFloat() + 0.9).toInt
+      board(i)(boardSize - 1) = (Random.nextFloat() + 0.9).toInt
       // 2. COLUMN 2 AND N-1
 
       if (board(i)(0) == 1 && i != boardSize - 1 && i != 0) {
@@ -580,7 +583,88 @@ class KakuroController extends GenericController {
     board(boardSize - 1)(boardSize - 1) = 0
     board(boardSize - 1)(0) = 0
 
-    board
+
+    // LAST STEP -> ELIMINATE SINGLE WHITE CELLS AND TOO LONG SETS OF WHITE CELLS
+    if(checkLogicBoard(board)){
+      board
+    }else{
+      generateLogicBoard(Settings.boardSize.id)
+    }
+
+  }
+
+  def checkLogicBoard(board: Array[Array[Int]]): Boolean = {
+
+    var noWhiteCellsFlag = false
+    var tooMuchWhiteCells = true
+
+    while(!noWhiteCellsFlag || tooMuchWhiteCells) {
+      noWhiteCellsFlag = true
+      tooMuchWhiteCells = false
+
+      for (i <- 0 until Settings.boardSize.id) {
+        for (j <- 0 until Settings.boardSize.id) {
+
+          board(i)(j) match {
+            case 0 =>
+
+              // DOWN DIRECTION
+              if (i + 1 < Settings.boardSize.id && board(i + 1)(j) != 0) {
+
+                var inputCellsNumber = 0
+
+                var markedFlag = true
+                for (k <- i until Settings.boardSize.id; if markedFlag) {
+                  if (board(k)(j) == 0 && k != i) {
+                    markedFlag = false
+                  } else {
+                    if (k != i)
+                      inputCellsNumber = inputCellsNumber + 1
+                  }
+                }
+
+                if (inputCellsNumber == 1) {
+                  noWhiteCellsFlag = false
+                  board(i + 1)(j) = 0
+
+                }
+                if (inputCellsNumber > 9){
+                  return false
+                }
+              }
+
+              //RIGHT DIRECTION
+              if (j + 1 < Settings.boardSize.id && board(i)(j + 1) != 0) {
+
+                var inputCellsNumber = 0
+
+                var markedFlag = true
+                for (k <- j until Settings.boardSize.id; if markedFlag) {
+                  if (board(i)(k) == 0 && k != j) {
+                    markedFlag = false
+                  } else {
+                    if (k != j)
+                      inputCellsNumber = inputCellsNumber + 1
+                  }
+                }
+
+                if (inputCellsNumber == 1) {
+                  noWhiteCellsFlag = false
+                  board(i)(j + 1) = 0
+
+                }
+                if (inputCellsNumber > 9){
+                  return false
+                }
+              }
+
+            case _ =>
+          }
+        }
+      }
+    }
+
+    true
   }
 
   def checkMarkedBoard(markedBoard: Array[Array[Int]]): Boolean = {
@@ -591,7 +675,6 @@ class KakuroController extends GenericController {
             return false
       }
     }
-
     true
   }
 
